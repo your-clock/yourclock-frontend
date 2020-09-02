@@ -1,6 +1,6 @@
 <template>
     <div class="mt-5 text-center">
-
+<a>hola</a>
     </div>
 </template>
 

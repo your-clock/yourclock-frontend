@@ -64,10 +64,10 @@ export default {
         }
     },
     created() {
-        if(process.env.NODE_ENV === 'development'){
-            const URL = process.env.VUE_APP_HOST_LOCAL;
-        }else{
-            const URL = process.env.VUE_APP_HOST;
+        if(process.env.VUE_APP_NODE_ENV === "production"){
+            const URL = process.env.VUE_APP_HOST_PROD;
+        }else if(process.env.NODE_ENV === "development"){
+            const URL = process.env.VUE_APP_HOST_DEV;
         }
         this.enviar();
         this.socket = io(URL);

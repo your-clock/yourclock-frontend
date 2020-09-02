@@ -3,8 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build"
+    "serveDev": "vue-cli-service serve --mode development",
+    "buildProd": "vue-cli-service build --mode production --dest ../yourclock-backend/public",
+    "buildDev": "vue-cli-service build --mode development --dest ../yourclock-backend/public"
   },
   "dependencies": {
     "axios": "^0.19.0",

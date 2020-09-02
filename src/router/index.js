@@ -16,13 +16,11 @@ require('dotenv').config();
 Vue.use(VueAxios, axios)
 
 // Agregamos la URL base de nuestra API
-if(process.env.NODE_ENV === 'development'){
-  axios.defaults.baseURL = process.env.VUE_APP_HOST_LOCAL+'/api';
-}else{
-  axios.defaults.baseURL = process.env.VUE_APP_HOST+'/api';
+if(process.env.VUE_APP_NODE_ENV === "production"){
+  const URL = process.env.VUE_APP_HOST_PROD;
+}else if(process.env.NODE_ENV === "development"){
+  axios.defaults.baseURL = process.env.VUE_APP_HOST_DEV+'/api';
 }
-console.log(axios.defaults.baseURL)
-console.log(process.env.NODE_ENV)
 
 Vue.use(VueRouter)
 
@@ -117,6 +115,7 @@ router.beforeEach((to, from, next)=> {
 
   console.log(to)
   let autorizacion = to.matched.some(record => record.meta.autentificado)
+  let vue=this
 
   axios.post('/token',{
       token: localStorage.token
@@ -134,6 +133,7 @@ router.beforeEach((to, from, next)=> {
   })
   .catch(function (error) {
       console.log("ERROR: "+error);
+      vue.$router.push('/error')
   });
 })
 
