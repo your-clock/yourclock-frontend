@@ -24,7 +24,6 @@ if(process.env.NODE_ENV === "production"){
 console.log(axios.defaults.baseURL)
 console.log(process.env.NODE_ENV)
 
-
 Vue.config.productionTip = false
 
 new Vue({

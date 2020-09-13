@@ -11,17 +11,8 @@ import Errors from '@/views/Error.vue'
 import RecoveryPassword from '@/views/RecoveryPassword.vue'
 import VueAxios from 'vue-axios'
 import axios from 'axios'
-require('dotenv').config();
 
 Vue.use(VueAxios, axios)
-
-// Agregamos la URL base de nuestra API
-if(process.env.VUE_APP_NODE_ENV === "production"){
-  const URL = process.env.VUE_APP_HOST_PROD;
-}else if(process.env.NODE_ENV === "development"){
-  axios.defaults.baseURL = process.env.VUE_APP_HOST_DEV+'/api';
-}
-
 Vue.use(VueRouter)
 
 const router = new VueRouter({
@@ -115,25 +106,23 @@ router.beforeEach((to, from, next)=> {
 
   console.log(to)
   let autorizacion = to.matched.some(record => record.meta.autentificado)
-  let vue=this
-
   axios.post('/token',{
       token: localStorage.token
   })
   .then(function (response) {
-    if(autorizacion && response.data == 0){
+    if(autorizacion && response.data == 0){                   // si necesita autorizacion y no tiene un token valido
       next('auth')
-    }else if(!autorizacion && response.data == 1){
+    }else if(!autorizacion && response.data == 1){            // si no necesita autorizacion y tiene un token valido
       next()
-    }else if(autorizacion && response.data == 1){
+    }else if(autorizacion && response.data == 1){             // si necesita autorizacion y tiene un token valido
       next()
-    }else if(!autorizacion && response.data == 0){
+    }else if(!autorizacion && response.data == 0){            // si no necesita autorizacion y no tiene un token valido
       next()
     }
   })
   .catch(function (error) {
       console.log("ERROR: "+error);
-      vue.$router.push('/error')
+      next('error')
   });
 })
 

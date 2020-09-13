@@ -6,29 +6,14 @@
                 Ingrese
             </h1>
             <br>
-            <div v-if="state == 305">
+            <div v-if="state == 305 || state == 306 || state == 307">
                 <b-alert show dismissible variant="warning">
-                    Llene todos los campos para completar el registro
+                    {{mensaje}}
                 </b-alert>
             </div>
-            <div v-else-if="state == 306">
-                <b-alert show dismissible variant="warning">
-                    contraseña incorrecta, intentelo de nuevo
-                </b-alert>
-            </div>
-            <div v-else-if="state == 307">
-                <b-alert show dismissible variant="warning">
-                    Correo incorrecto, intentelo de nuevo
-                </b-alert>
-            </div>
-            <div v-else-if="state == 308">
+            <div v-else-if="state == 308 || state == 400 || state == 401">
                 <b-alert show dismissible variant="danger">
-                    Error, verifique su cuenta para continuar
-                </b-alert>
-            </div>
-            <div v-else-if="state == 400">
-                <b-alert show dismissible variant="danger">
-                    Error, compruebe su conexion e intentelo de nuevo
+                    {{mensaje}}
                 </b-alert>
             </div>
             <br>
@@ -37,11 +22,11 @@
             Contraseña: <b-form-input :disabled="loading" type="password" v-model="userPassword" :state="comprobarPassword" size="sm" placeholder="Escriba su contraseña"></b-form-input>
             <br>
             <div>
-                <b-link href="#/ForgotPassword">Olvide mi contraseña</b-link>
+                <b-link :disabled="loading" href="#/ForgotPassword">Olvide mi contraseña</b-link>
             </div>
             <br>
             <div>
-                <b-link @click="google">Ingresa con Google</b-link>
+                <b-link :disabled="loading" @click="google">Ingresa con Google</b-link>
             </div>
             <br>
             <div>
@@ -62,7 +47,8 @@ export default{
             state: "",
             userEmail: "",
             userPassword: "",
-            loading: false
+            loading: false,
+            mensaje: ""
         }
     },
     computed:{
@@ -83,8 +69,10 @@ export default{
                 pass: this.userPassword
             })
             .then(function (response) {
-                vue.state = response.data
-                if(response.data.length > 6 ){
+                vue.state = response.data.code
+                vue.mensaje = response.data.msg
+                console.log(vue.state)
+                if(response.data.code.length > 5 ){
                     console.log("token recibido")
                     localStorage.token = response.data
                     vue.$router.push('/inicio')

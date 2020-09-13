@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "start": "vue-cli-service serve --mode production",
     "serveDev": "vue-cli-service serve --mode development",
     "buildProd": "vue-cli-service build --mode production --dest ../yourclock-backend/public",
     "buildDev": "vue-cli-service build --mode development --dest ../yourclock-backend/public"
