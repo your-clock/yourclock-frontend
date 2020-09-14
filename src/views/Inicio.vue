@@ -45,7 +45,7 @@ export default {
                 token: localStorage.token
             })
             .then(function (response) {
-                localStorage.token = response.data
+                localStorage.token = response.data.code
             })
             .catch(function (error) {
                 console.log("ERROR: "+error);

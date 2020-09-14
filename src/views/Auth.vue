@@ -21,15 +21,15 @@
             <br>
             Contraseña: <b-form-input :disabled="loading" type="password" v-model="userPassword" :state="comprobarPassword" size="sm" placeholder="Escriba su contraseña"></b-form-input>
             <br>
-            <div>
+            <div id=forgotPassword>
                 <b-link :disabled="loading" href="#/ForgotPassword">Olvide mi contraseña</b-link>
             </div>
             <br>
-            <div>
+            <div id=loginGoogle>
                 <b-link :disabled="loading" @click="google">Ingresa con Google</b-link>
             </div>
             <br>
-            <div>
+            <div id=ingresar>
                 <b-button :disabled="loading" @click="enviar" variant="outline-success">Ingrese</b-button>
             </div>
             <br>
@@ -71,10 +71,9 @@ export default{
             .then(function (response) {
                 vue.state = response.data.code
                 vue.mensaje = response.data.msg
-                console.log(vue.state)
                 if(response.data.code.length > 5 ){
                     console.log("token recibido")
-                    localStorage.token = response.data
+                    localStorage.token = response.data.code
                     vue.$router.push('/inicio')
                 }else{
                     vue.loading = false
