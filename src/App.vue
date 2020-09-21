@@ -1,31 +1,32 @@
 <template>
   <div id="app">
-      <b-navbar toggleable="md" type="dark" variant="dark"> 
-		<b-container>
-			<b-navbar-toggle target="nav-collapse">
-			</b-navbar-toggle>
-			<b-navbar-brand href="#/inicio">
-				<img alt="Vue logo" src="@/assets/logo.png" width="55px">
-				Reloj
-			</b-navbar-brand>
-			<b-collapse id="nav-collapse" is-nav>
-				 <b-navbar-nav class="ml-auto">
-					 <b-nav-item :to="{name: 'inicio'}">Inicio</b-nav-item>
-					 <b-nav-item-dropdown right>
-						<template v-slot:button-content>
-							<em>Cuenta</em>
-						</template>
-						<b-dropdown-item href="#/Login">Registrese</b-dropdown-item>
-						<b-dropdown-item href="#/Auth">Ingrese</b-dropdown-item>
-						<b-dropdown-item-button @click="salir">Salir</b-dropdown-item-button>
-          </b-nav-item-dropdown>
-				 </b-navbar-nav>
-			</b-collapse>
-		</b-container>
+    <b-navbar toggleable="md" type="dark" variant="dark"> 
+		  <b-container>
+			  <b-navbar-toggle target="nav-collapse">
+			  </b-navbar-toggle>
+			  <b-navbar-brand href="#/inicio">
+				  <img id=logo alt="Vue logo" src="@/assets/logo.png" width="55px">
+				  Reloj
+			  </b-navbar-brand>
+			  <b-collapse id="nav-collapse" is-nav>
+				  <b-navbar-nav class="ml-auto">
+					  <b-nav-item :to="{name: 'inicio'}">Inicio</b-nav-item>
+            <b-nav-item-dropdown right>
+              <template v-slot:button-content>
+                <em>Cuenta</em>
+              </template>
+              <b-dropdown-item id=btn-register href="#/Login">Registrese</b-dropdown-item>
+              <b-dropdown-item id=btn-auth href="#/Auth">Ingrese</b-dropdown-item>
+              <b-dropdown-item id=btn-settings href="#/Settings">Configuracion</b-dropdown-item>
+              <b-dropdown-item-button id=btn-logout @click="salir">Salir</b-dropdown-item-button>
+            </b-nav-item-dropdown>
+				  </b-navbar-nav>
+			  </b-collapse>
+		  </b-container>
 	  </b-navbar>
-	<b-container>
-		<router-view/>
-	</b-container>
+    <b-container>
+      <router-view/>
+    </b-container>
   </div>
 </template>
 
@@ -34,14 +35,15 @@ export default {
 	name: 'app',
     data(){
         return{
-
+  
         }
 	},
 	methods:{
 		salir(){
 			let vue=this
 			console.log("Has salido")
-			localStorage.token = null
+      localStorage.token = null
+      sessionStorage.clear();
 			vue.$router.push('/auth')
 		}
 	}

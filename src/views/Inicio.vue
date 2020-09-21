@@ -1,8 +1,8 @@
 <template>
     <div class="mt-5 text-center">
-        <h1>
-            Bienvenid@
-        </h1>
+        <b-container fluid>
+            <h1>Bienvenid@ {{userInfo.nombre}}</h1>
+        </b-container>
         <br><br>
         <b-col>
             <br>
@@ -37,20 +37,13 @@ export default {
                 temperatura_amb: 0,
                 temperatura_local: 0
             },
+            userInfo:{
+                nombre: sessionStorage.nombre,
+                correo: sessionStorage.correo
+            }
         }
     },
     methods:{
-        enviar(){
-            this.axios.post('/inicio',{
-                token: localStorage.token
-            })
-            .then(function (response) {
-                localStorage.token = response.data.code
-            })
-            .catch(function (error) {
-                console.log("ERROR: "+error);
-            });
-        },
         alarma(){
             this.axios.post('/alarma',{
                 time: this.alarm
@@ -69,7 +62,6 @@ export default {
         }else if(process.env.NODE_ENV === "development"){
             const URL = process.env.VUE_APP_HOST_DEV;
         }
-        this.enviar();
         this.socket = io(URL);
     },
     async mounted(){
@@ -86,7 +78,7 @@ export default {
 		font-family: Courier;
 		text-align: center;
 		font-weight: 450;
-		font-size: 70px;
+		font-size: 40px;
 		line-height: 1.3em;
 	}
 </style>
