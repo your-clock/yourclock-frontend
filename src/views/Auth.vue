@@ -39,6 +39,7 @@
 </template>
 
 <script>
+import io from "socket.io-client"
 
 export default{
     name: 'auth',
@@ -89,25 +90,29 @@ export default{
         google(){
             let vue = this
             vue.loading = true
-            this.axios.get('/auth/google',{
-                headers: {
-                    'Access-Control-Allow-Origin' : '*',
-                    'Access-Control-Allow-Methods':'GET,PUT,POST,DELETE,PATCH,OPTIONS',
-                }
-            })
+            this.axios.get('/auth/google')
             .then(function(response){
                 console.log(response.data)
-                vue.state = response.data
-                if(response.data == 300){
-                    alert("Mensaje enviado exitosamente, verifique su correo para cambiar su contraseña")
-                    vue.$router.push('/')
-                }
             })
             .catch(function(error){
+                vue.loading = false
                 console.log("ERROR: "+error)
                 vue.$router.push('/error')
             });
         }
+    },
+    created() {
+        if(process.env.VUE_APP_NODE_ENV === "production"){
+            const URL = process.env.VUE_APP_HOST_PROD;
+        }else if(process.env.NODE_ENV === "development"){
+            const URL = process.env.VUE_APP_HOST_DEV;
+        }
+        this.socket = io(URL);
+    },
+    async mounted(){
+        await this.socket.on('google', data => {
+            console.log(data)
+        })
     }
 }
 </script>
