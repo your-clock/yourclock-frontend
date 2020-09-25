@@ -9,9 +9,14 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }))     //application/x-www-form-urlencoded
 app.use(express.static(path.join(__dirname, 'dist')));
+app.set('views', path.join(__dirname, 'views'));
 
 app.set('puerto', process.env.PORT || 8080);
 
 http.listen(app.get('puerto'), function () {
     console.log('App listening on port: '+ app.get('puerto')+' In environment: '+process.env.NODE_ENV);
+});
+
+app.use('/google030be2b97e367ddd', function(req, res){
+	res.sendFile('views/google030be2b97e367ddd.html');
 });
