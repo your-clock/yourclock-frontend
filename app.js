@@ -9,7 +9,7 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }))     //application/x-www-form-urlencoded
 app.use(express.static(path.join(__dirname, 'dist')));
-app.set('views', path.join(__dirname, 'views'));
+app.use(express.static(path.join(__dirname, 'views')));
 
 app.set('puerto', process.env.PORT || 8080);
 
