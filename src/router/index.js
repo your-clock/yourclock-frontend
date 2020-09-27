@@ -9,6 +9,7 @@ import ForgotPassword from '@/views/ForgotPassword.vue'
 import Home from '@/views/Home.vue'
 import Errors from '@/views/Error.vue'
 import RecoveryPassword from '@/views/RecoveryPassword.vue'
+import UserGoogle from '@/views/UserGoogle.vue'
 import VueAxios from 'vue-axios'
 import axios from 'axios'
 
@@ -98,6 +99,14 @@ const router = new VueRouter({
       meta: {
         autentificado: false
       }
+    },
+    {
+      path: '/usergoogle/:value/:user/:name',
+      name: 'usergoogle', 
+      component: UserGoogle,
+      meta: {
+        autentificado: false
+      }
     }
   ]
 })
@@ -106,16 +115,47 @@ router.beforeEach((to, from, next)=> {
 
   console.log(to)
   let autorizacion = to.matched.some(record => record.meta.autentificado)
-  axios.post('/token',{
+  axios.post('/verifytoken',{
       token: localStorage.token
   })
   .then(function (response) {
     if(autorizacion && response.data == 0){                   // si necesita autorizacion y no tiene un token valido
+      alert("Lo sentimos, debe registrarse para continuar")
       next('auth')
-    }else if(!autorizacion && response.data == 1){            // si no necesita autorizacion y tiene un token valido
-      next()
     }else if(autorizacion && response.data == 1){             // si necesita autorizacion y tiene un token valido
-      next()
+      axios.post('updatetoken',{
+        token: localStorage.token
+      })
+      .then(function(response){
+        if(response.data.code == 300){
+          localStorage.token = response.data.token
+          next()
+        }else{
+          console.log(response.data.msg);
+          next('error')
+        }
+      })
+      .catch(function(error){
+        console.log("ERROR: "+error);
+        next('error')
+      })
+    }else if(!autorizacion && response.data == 1){            // si no necesita autorizacion y tiene un token valido
+      axios.post('updatetoken',{
+        token: localStorage.token
+      })
+      .then(function(response){
+        if(response.data.code == 300){
+          localStorage.token = response.data.token
+          next()
+        }else{
+          console.log(response.data.msg);
+          next('error')
+        }
+      })
+      .catch(function(error){
+        console.log("ERROR: "+error);
+        next('error')
+      })
     }else if(!autorizacion && response.data == 0){            // si no necesita autorizacion y no tiene un token valido
       next()
     }

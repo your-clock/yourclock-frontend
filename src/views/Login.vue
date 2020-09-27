@@ -32,7 +32,15 @@
             </b-alert>
         </div>
         <br>
-        Nombre: <b-form-input type="text" v-model="userName" :state="comprobarName" size="sm" placeholder="Escriba su nombre completo"></b-form-input>
+        Primer nombre: <b-form-input type="text" v-model="userName" :state="comprobarName" size="sm" placeholder="Escriba su nombre completo"></b-form-input>
+        <br>
+        Segundo nombre: <b-form-input type="text" v-model="userName" :state="comprobarName" size="sm" placeholder="Escriba su nombre completo"></b-form-input>
+        <br>
+        <br>
+        Primer apellido: <b-form-input type="text" v-model="userName" :state="comprobarName" size="sm" placeholder="Escriba su nombre completo"></b-form-input>
+        <br>
+        <br>
+        Segundo apellido: <b-form-input type="text" v-model="userName" :state="comprobarName" size="sm" placeholder="Escriba su nombre completo"></b-form-input>
         <br>
         Correo: <b-form-input type="email" v-model="userEmail" :state="comprobarEmail" size="sm" placeholder="Escriba su correo electronico"></b-form-input>
         <br>
@@ -56,7 +64,10 @@ export default{
     name: 'Login',
     data(){
         return{
-            userName: "",
+            userName1: "",
+            userName2: "",
+            userLastName1: "",
+            userLastName2: "",
             userEmail: "",
             userPassword: "",
             userCity: "",
@@ -65,17 +76,26 @@ export default{
         }
     },
     computed:{
-        comprobarName(){
-            return this.userName.length > 0 ? true : false
+        comprobarName1(){
+            return this.userName1.length > 1 ? true : false
+        },
+        comprobarName2(){
+            return this.userName2.length > 1 ? true : false
+        },
+        comprobarLastName1(){
+            return this.userLastName1.length > 1 ? true : false
+        },
+        comprobarLastName2(){
+            return this.userLastName2.length > 1 ? true : false
         },
         comprobarEmail(){
-            return this.userEmail.length > 0 ? true : false
+            return this.userEmail.length > 8 ? true : false
         },
         comprobarPassword(){
             return this.userPassword.length > 0 ? true : false
         },
         comprobarCity(){
-            return this.userCity.length > 0 ? true : false
+            return this.userCity.length > 1 ? true : false
         }
     },  
     methods:{
@@ -85,7 +105,10 @@ export default{
             this.axios.post('/login',{
                 mail: this.userEmail,
                 pass: this.userPassword,
-                name: this.userName,
+                name1: this.userName1,
+                name2: this.userName2,
+                lastName1: this.userLastName1,
+                lastName2: this.userLastName2,
                 city: this.userCity
             })
             .then(function (response) {
