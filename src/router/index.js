@@ -9,6 +9,7 @@ import ForgotPassword from '@/views/ForgotPassword.vue'
 import Home from '@/views/Home.vue'
 import Errors from '@/views/Error.vue'
 import RecoveryPassword from '@/views/RecoveryPassword.vue'
+import UserGoogle from '@/views/UserGoogle.vue'
 import VueAxios from 'vue-axios'
 import axios from 'axios'
 
@@ -95,6 +96,14 @@ const router = new VueRouter({
       path: '/error',
       name: 'error',
       component: Errors,
+      meta: {
+        autentificado: false
+      }
+    },
+    {
+      path: '/usergoogle/:value/:user/:name',
+      name: 'usergoogle', 
+      component: UserGoogle,
       meta: {
         autentificado: false
       }
