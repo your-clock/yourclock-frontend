@@ -74,9 +74,9 @@ export default{
                 vue.mensaje = response.data.msg
                 if(response.data.code == 300 ){
                     console.log("token recibido")
-                    localStorage.token = response.data.token
-                    sessionStorage.nombre = response.data.infoClient.nombre
-                    sessionStorage.correo = response.data.infoClient.correo
+                    localStorage.setItem("token", response.data.token)
+                    sessionStorage.setItem("nombre", response.data.infoClient.nombre)
+                    sessionStorage.setItem("correo", response.data.infoClient.correo)
                     vue.$router.push('/inicio')
                 }else{
                     vue.loading = false

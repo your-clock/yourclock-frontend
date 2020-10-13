@@ -16,8 +16,8 @@ export default {
         eliminar(){
             let vue=this
             console.log("Eliminar cuenta");
-            this.axios.post('/deleteaccount',{
-                mail: sessionStorage.correo
+            this.axios.delete('/deleteaccount',{
+                mail: Buffer.from(sessionStorage.correo, 'base64').toString('ascii')
             })
             .then(function (response) {
                 console.log(response.data)

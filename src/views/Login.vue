@@ -13,34 +13,34 @@
         <br>
         <div v-if="state == 305">
             <b-alert show dismissible variant="warning">
-                Llene todos los campos para completar el registro
+                {{mensaje}}
             </b-alert>
         </div>
         <div v-else-if="state == 304">
             <b-alert show dismissible variant="warning">
-                Usuario ya existente, intentelo de nuevo
+                {{mensaje}}
             </b-alert>
         </div>
         <div v-else-if="state == 400">
             <b-alert show dismissible variant="danger">
-                Error, compruebe su conexion e intentelo de nuevo
+                {{mensaje}}
             </b-alert>
         </div>
         <div v-else-if="state == 402">
             <b-alert show dismissible variant="danger">
-                Error al enviar el correo, verifique su conexion, si el error persiste, intente mas tarde
+                {{mensaje}}
             </b-alert>
         </div>
         <br>
-        Primer nombre: <b-form-input type="text" v-model="userName" :state="comprobarName" size="sm" placeholder="Escriba su nombre completo"></b-form-input>
+        Primer nombre: <b-form-input type="text" v-model="userName1" :state="comprobarName1" size="sm" placeholder="Escriba su nombre completo"></b-form-input>
         <br>
-        Segundo nombre: <b-form-input type="text" v-model="userName" :state="comprobarName" size="sm" placeholder="Escriba su nombre completo"></b-form-input>
-        <br>
-        <br>
-        Primer apellido: <b-form-input type="text" v-model="userName" :state="comprobarName" size="sm" placeholder="Escriba su nombre completo"></b-form-input>
+        Segundo nombre: <b-form-input type="text" v-model="userName2" :state="comprobarName2" size="sm" placeholder="Escriba su nombre completo"></b-form-input>
         <br>
         <br>
-        Segundo apellido: <b-form-input type="text" v-model="userName" :state="comprobarName" size="sm" placeholder="Escriba su nombre completo"></b-form-input>
+        Primer apellido: <b-form-input type="text" v-model="userLastName1" :state="comprobarLastName1" size="sm" placeholder="Escriba su nombre completo"></b-form-input>
+        <br>
+        <br>
+        Segundo apellido: <b-form-input type="text" v-model="userLastName2" :state="comprobarLastName2" size="sm" placeholder="Escriba su nombre completo"></b-form-input>
         <br>
         Correo: <b-form-input type="email" v-model="userEmail" :state="comprobarEmail" size="sm" placeholder="Escriba su correo electronico"></b-form-input>
         <br>
@@ -72,7 +72,8 @@ export default{
             userPassword: "",
             userCity: "",
             state: "",
-            token: ""
+            token: "",
+            mensaje: ""
         }
     },
     computed:{
@@ -102,7 +103,7 @@ export default{
         enviar(){
             let vue=this
             console.log("enviado")
-            this.axios.post('/login',{
+            this.axios.post('/login', {
                 mail: this.userEmail,
                 pass: this.userPassword,
                 name1: this.userName1,
@@ -110,16 +111,15 @@ export default{
                 lastName1: this.userLastName1,
                 lastName2: this.userLastName2,
                 city: this.userCity
-            })
-            .then(function (response) {
+            }).then(function (response) {
                 console.log(response.data)
-                vue.state = response.data
-                if(response.data == 300){
-                    alert("Usuario registrado correctamente, verifique su correo para autenticar su cuenta")
+                vue.state = response.data.code
+                vue.mensaje = response.data.msg
+                if(response.data.code == 300){
+                    alert(vue.mensaje)
                     vue.$router.push('/')
                 }
-            })
-            .catch(function (error) {
+            }).catch(function (error) {
                 console.log("ERROR: "+error);
                 vue.$router.push('/error')
             });

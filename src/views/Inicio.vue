@@ -38,8 +38,8 @@ export default {
                 temperatura_local: 0
             },
             userInfo:{
-                nombre: sessionStorage.nombre,
-                correo: sessionStorage.correo
+                nombre: Buffer.from(sessionStorage.nombre, 'base64').toString('ascii'),
+                correo: Buffer.from(sessionStorage.correo, 'base64').toString('ascii')
             }
         }
     },

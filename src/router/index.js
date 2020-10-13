@@ -119,16 +119,17 @@ router.beforeEach((to, from, next)=> {
       token: localStorage.token
   })
   .then(function (response) {
-    if(autorizacion && response.data == 0){                   // si necesita autorizacion y no tiene un token valido
+    let verificacion = response.data
+    if(autorizacion && !verificacion){                   // si necesita autorizacion y no tiene un token valido
       alert("Lo sentimos, debe registrarse para continuar")
       next('auth')
-    }else if(autorizacion && response.data == 1){             // si necesita autorizacion y tiene un token valido
+    }else if(autorizacion && verificacion){             // si necesita autorizacion y tiene un token valido
       axios.post('updatetoken',{
         token: localStorage.token
       })
       .then(function(response){
         if(response.data.code == 300){
-          localStorage.token = response.data.token
+          localStorage.setItem("token", response.data.token)
           next()
         }else{
           console.log(response.data.msg);
@@ -139,13 +140,13 @@ router.beforeEach((to, from, next)=> {
         console.log("ERROR: "+error);
         next('error')
       })
-    }else if(!autorizacion && response.data == 1){            // si no necesita autorizacion y tiene un token valido
+    }else if(!autorizacion && verificacion){            // si no necesita autorizacion y tiene un token valido
       axios.post('updatetoken',{
         token: localStorage.token
       })
       .then(function(response){
         if(response.data.code == 300){
-          localStorage.token = response.data.token
+          localStorage.setItem("token", response.data.token)
           next()
         }else{
           console.log(response.data.msg);
@@ -156,7 +157,7 @@ router.beforeEach((to, from, next)=> {
         console.log("ERROR: "+error);
         next('error')
       })
-    }else if(!autorizacion && response.data == 0){            // si no necesita autorizacion y no tiene un token valido
+    }else if(!autorizacion && !verificacion){            // si no necesita autorizacion y no tiene un token valido
       next()
     }
   })
