@@ -44,6 +44,7 @@ export default {
 			console.log("Has salido")
       localStorage.token = null
       sessionStorage.clear();
+      localStorage.clear();
 			vue.$router.push('/auth')
 		}
 	}

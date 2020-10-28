@@ -53,7 +53,7 @@ const router = new VueRouter({
       }
     },
     {
-      path: '/verify',
+      path: '/verify/:email',
       name: 'verify', 
       component: Verify,
       meta: {
@@ -114,21 +114,25 @@ const router = new VueRouter({
 router.beforeEach((to, from, next)=> {
 
   console.log(to)
+  if(localStorage.getItem('token') == undefined){
+    localStorage.setItem('token', null)
+  }
   let autorizacion = to.matched.some(record => record.meta.autentificado)
-  axios.post('/verifytoken',{
+  axios.post('/token/verifytoken',{
       token: localStorage.token
   })
   .then(function (response) {
-    if(autorizacion && response.data == 0){                   // si necesita autorizacion y no tiene un token valido
+    let verificacion = response.data
+    if(autorizacion && !verificacion){                   // si necesita autorizacion y no tiene un token valido
       alert("Lo sentimos, debe registrarse para continuar")
       next('auth')
-    }else if(autorizacion && response.data == 1){             // si necesita autorizacion y tiene un token valido
-      axios.post('updatetoken',{
+    }else if(autorizacion && verificacion){             // si necesita autorizacion y tiene un token valido
+      axios.post('/token/updatetoken',{
         token: localStorage.token
       })
       .then(function(response){
         if(response.data.code == 300){
-          localStorage.token = response.data.token
+          localStorage.setItem("token", response.data.token)
           next()
         }else{
           console.log(response.data.msg);
@@ -139,13 +143,13 @@ router.beforeEach((to, from, next)=> {
         console.log("ERROR: "+error);
         next('error')
       })
-    }else if(!autorizacion && response.data == 1){            // si no necesita autorizacion y tiene un token valido
-      axios.post('updatetoken',{
+    }else if(!autorizacion && verificacion){            // si no necesita autorizacion y tiene un token valido
+      axios.post('/token/updatetoken',{
         token: localStorage.token
       })
       .then(function(response){
         if(response.data.code == 300){
-          localStorage.token = response.data.token
+          localStorage.setItem("token", response.data.token)
           next()
         }else{
           console.log(response.data.msg);
@@ -156,7 +160,7 @@ router.beforeEach((to, from, next)=> {
         console.log("ERROR: "+error);
         next('error')
       })
-    }else if(!autorizacion && response.data == 0){            // si no necesita autorizacion y no tiene un token valido
+    }else if(!autorizacion && !verificacion){            // si no necesita autorizacion y no tiene un token valido
       next()
     }
   })
