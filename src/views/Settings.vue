@@ -1,6 +1,6 @@
 <template>
     <div class="mt-5 text-center">
-        <h1>hola</h1>
+        <br>
         <div>
             <b-button id="btnDeleteAccount" @click="eliminar" variant="outline-danger">Eliminar cuenta</b-button>
         </div>
