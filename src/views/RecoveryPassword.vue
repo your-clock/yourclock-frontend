@@ -52,7 +52,7 @@ export default {
             if(this.userPassword != this.userPasswordVerification){
                 alert("Las contraseñas indicadas no coinciden, verifique e intentelo de nuevo")
             }else{
-                this.axios.post('/recoverypassword',{
+                this.axios.post('/user/recoverypassword',{
                     id: vue.$route.params.id,
                     pass: this.userPassword
                 })

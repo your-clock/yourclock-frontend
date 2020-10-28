@@ -2,32 +2,36 @@
     <div class="mt-5 text-center">
         <h1>hola</h1>
         <div>
-            <b-button @click="eliminar" variant="outline-danger">Eliminar cuenta</b-button>
+            <b-button id="btnDeleteAccount" @click="eliminar" variant="outline-danger">Eliminar cuenta</b-button>
         </div>
     </div>
 </template>
 
 <script>
 
-import router from 'vue-router'
+export default{
+    name: 'settings',
+    data(){
+        return{
 
-export default {
+        }
+    }, 
     methods:{
         eliminar(){
-            let vue=this
+            let vue = this
             console.log("Eliminar cuenta");
-            this.axios.delete('/deleteaccount',{
-                mail: Buffer.from(sessionStorage.correo, 'base64').toString('ascii')
+            this.axios.post('/user/deleteaccount',{
+                mail: localStorage.correo
             })
             .then(function (response) {
                 console.log(response.data)
                 if(response.data.code == 311){
                     sessionStorage.clear();
-                    localStorage.token = null;
+                    localStorage.clear();
                     alert(response.data.msg)
                     vue.$router.push('/')
                 }else{
-                    console.log(msg);
+                    console.log(response.data.msg);
                 }
             })
             .catch(function (error) {

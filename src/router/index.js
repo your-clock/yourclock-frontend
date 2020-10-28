@@ -53,7 +53,7 @@ const router = new VueRouter({
       }
     },
     {
-      path: '/verify',
+      path: '/verify/:email',
       name: 'verify', 
       component: Verify,
       meta: {
@@ -114,8 +114,11 @@ const router = new VueRouter({
 router.beforeEach((to, from, next)=> {
 
   console.log(to)
+  if(localStorage.getItem('token') == undefined){
+    localStorage.setItem('token', null)
+  }
   let autorizacion = to.matched.some(record => record.meta.autentificado)
-  axios.post('/verifytoken',{
+  axios.post('/token/verifytoken',{
       token: localStorage.token
   })
   .then(function (response) {
@@ -124,7 +127,7 @@ router.beforeEach((to, from, next)=> {
       alert("Lo sentimos, debe registrarse para continuar")
       next('auth')
     }else if(autorizacion && verificacion){             // si necesita autorizacion y tiene un token valido
-      axios.post('updatetoken',{
+      axios.post('/token/updatetoken',{
         token: localStorage.token
       })
       .then(function(response){
@@ -141,7 +144,7 @@ router.beforeEach((to, from, next)=> {
         next('error')
       })
     }else if(!autorizacion && verificacion){            // si no necesita autorizacion y tiene un token valido
-      axios.post('updatetoken',{
+      axios.post('/token/updatetoken',{
         token: localStorage.token
       })
       .then(function(response){

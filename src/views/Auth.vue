@@ -30,7 +30,7 @@
             </div>
             <br>
             <div id=ingresar>
-                <b-button :disabled="loading" @click="enviar" variant="outline-success">Ingrese</b-button>
+                <b-button :disabled="comprobarBtnEnviar" @click="enviar" variant="outline-success">Ingrese</b-button>
             </div>
             <br>
             <br>
@@ -54,35 +54,56 @@ export default{
     },
     computed:{
         comprobarEmail(){
-            return this.userEmail.length > 0 ? true : false
+            return this.userEmail.length >= 6 ? true : false
         },
         comprobarPassword(){
-            return this.userPassword.length > 0 ? true : false
+            return this.userPassword.length >= 8 ? true : false
+        },
+        comprobarBtnEnviar(){
+            return this.comprobarPassword == true && this.comprobarEmail == true ? false : true
         }
     },  
     methods:{
         enviar(){
-            let vue=this
+            let vue = this
             vue.loading = true
+            vue.comprobarBtnEnviar = true
             console.log("enviado")
-            this.axios.post('/auth',{
+            vue.axios.post('/user/auth',{
                 mail: this.userEmail,
                 pass: this.userPassword
-            })
-            .then(function (response) {
+            }).then(function (response) {
                 vue.state = response.data.code
                 vue.mensaje = response.data.msg
                 if(response.data.code == 300 ){
-                    console.log("token recibido")
-                    localStorage.setItem("token", response.data.token)
-                    sessionStorage.setItem("nombre", response.data.infoClient.nombre)
-                    sessionStorage.setItem("correo", response.data.infoClient.correo)
-                    vue.$router.push('/inicio')
+                    console.log("usuario autenticado")
+                    localStorage.setItem("nombre", response.data.infoClient.nombre)
+                    localStorage.setItem("correo", response.data.infoClient.correo)
+                    localStorage.setItem("id", response.data.infoClient.id)
+                    vue.axios.post('/token/createtoken',{
+                        tokenData: {
+                            nombre: localStorage.getItem("nombre"),
+                            correo: localStorage.getItem("correo"),
+                            id: localStorage.getItem("id")
+                        }
+                    }).then(function(response){
+                        vue.state = response.data.code
+                        vue.mensaje = response.data.msg
+                        if(response.data.code == 300){
+                            console.log("token recibido")
+                            localStorage.setItem("token", response.data.token)
+                            vue.$router.push('/inicio')
+                        }else{
+                            vue.loading = false
+                        }
+                    }).catch(function(error){
+                        console.log("ERROR: "+error);
+                        vue.$router.push('/error')
+                    })
                 }else{
                     vue.loading = false
                 }
-            })
-            .catch(function (error) {
+            }).catch(function (error) {
                 console.log("ERROR: "+error);
                 vue.$router.push('/error')
             });
@@ -90,7 +111,7 @@ export default{
         google(){
             let vue = this
             vue.loading = true
-            this.axios.get('/auth/google')
+            this.axios.get('/user/auth/google')
             .then(function(response){
                 console.log(response.data)
                 window.location = response.data
