@@ -9,6 +9,7 @@
             Escriba su correo electronico, le enviaremos un mensaje para reestablecerla.
         </a1>
         <br>
+        <br>
         <div v-if='state == 400'>
             <b-alert show dismissible variant="warning">
                 Error, compruebe su conexion e intentelo de nuevo
@@ -61,7 +62,7 @@ export default {
         enviar(){
             let vue = this
             console.log("enviado")
-            this.axios.post('/forgotpassword',{
+            this.axios.post('/user/forgotpassword',{
                 mail: this.userEmail
             })
             .then(function(response){
