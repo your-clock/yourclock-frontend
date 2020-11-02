@@ -49,7 +49,8 @@ export default{
             userEmail: "",
             userPassword: "",
             loading: false,
-            mensaje: ""
+            mensaje: "",
+            socket: {}
         }
     },
     computed:{
@@ -122,20 +123,6 @@ export default{
                 vue.$router.push('/error')
             });
         }
-    },
-    created() {
-        if(process.env.NODE_ENV === "production"){
-            const URL = process.env.VUE_APP_HOST_PROD;
-        }else if(process.env.NODE_ENV === "development"){
-            const URL = process.env.VUE_APP_HOST_DEV;
-        }
-        this.socket = io(URL);
-        console.log("Conexion por socket establecida");
-    },
-    async mounted(){
-        await this.socket.on('google', data => {
-            console.log(data)
-        })
     }
 }
 </script>

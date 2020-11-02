@@ -32,6 +32,7 @@ export default {
         return{
             alarm: "",
             socket: {},
+            URL: "",
             token: localStorage.token,
             datos: {
                 temperatura_amb: 0,
@@ -57,16 +58,19 @@ export default {
         }
     },
     created() {
+        let vue = this;
         if(process.env.VUE_APP_NODE_ENV === "production"){
-            const URL = process.env.VUE_APP_HOST_PROD;
+            vue.URL = process.env.VUE_APP_HOST_PROD;
         }else if(process.env.NODE_ENV === "development"){
-            const URL = process.env.VUE_APP_HOST_DEV;
+            vue.URL = process.env.VUE_APP_HOST_DEV;
         }
-        this.socket = io(URL);
+        this.socket = io(vue.URL);
+        console.log("Connected socket to: "+vue.URL);
     },
     async mounted(){
-        await this.socket.on('datos', data => {
-            this.datos = data;
+        let vue = this
+        await vue.socket.on('datos', data => {
+            vue.datos = data;
             console.log(data)
         })
     }
