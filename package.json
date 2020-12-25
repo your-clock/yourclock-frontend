@@ -11,6 +11,8 @@
     "buildDev": "vue-cli-service build --mode development"
   },
   "dependencies": {
+    "@vue/cli-plugin-babel": "^4.1.0",
+    "@vue/cli-service": "^4.5.6",
     "axios": "^0.19.0",
     "bootstrap": "^4.4.1",
     "bootstrap-vue": "^2.16.0",
@@ -24,9 +26,8 @@
     "vue": "^2.6.10",
     "vue-axios": "^2.1.5",
     "vue-chartjs": "^3.5.0",
+    "vue-meta": "^2.4.0",
     "vue-router": "^3.1.3",
-    "@vue/cli-plugin-babel": "^4.1.0",
-    "@vue/cli-service": "^4.5.6",
     "vue-template-compiler": "^2.6.10",
     "vuex": "^3.1.2"
   },

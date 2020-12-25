@@ -1,25 +1,49 @@
 <template>
-    <div class="mt-5 text-center">
-        <b-container fluid>
-            <h1>Bienvenid@ {{userInfo.nombre}}</h1>
-        </b-container>
-        <br><br>
-        <b-col>
-            <br>
-            temperatura ambiente: {{datos.temperatura_amb}}
-            <br>
-            temperatura local: {{datos.temperatura_local}}
-            <br>
-        </b-col>
-        <b-col>
-            <div>
+    <div>
+        <b-navbar toggleable="md" style="backgroundColor:#C0C0C0">
+            <b-container>
+                <b-navbar-toggle target="nav-collapse">
+                </b-navbar-toggle>
+                <b-navbar-brand href="#/inicio">
+                    <img id=logo alt="Vue logo" src="@/assets/logo_clock.png" width="55px">
+                    Your Clock
+                </b-navbar-brand>
+                <b-collapse id="nav-collapse" is-nav>
+                    <b-navbar-nav class="ml-auto">
+                        <b-nav-item :to="{name: 'inicio'}">Inicio</b-nav-item>
+                <b-nav-item-dropdown right>
+                <template v-slot:button-content>
+                    <em>Cuenta</em>
+                </template>
+                <b-dropdown-item id=btn-settings href="#/Settings">Configuracion</b-dropdown-item>
+                <b-dropdown-item-button id=btn-logout @click="salir">Salir</b-dropdown-item-button>
+                </b-nav-item-dropdown>
+                    </b-navbar-nav>
+                </b-collapse>
+            </b-container>
+        </b-navbar>
+        <div class="mt-5 text-center">
+            <b-container fluid>
+                <h1>Bienvenid@ {{userInfo.nombre}}</h1>
+            </b-container>
+            <br><br>
+            <b-col>
                 <br>
-                Select a time: <input type="time" v-model="alarm" class="form-control">
+                temperatura ambiente: {{datos.temperatura_amb}}
                 <br>
+                temperatura local: {{datos.temperatura_local}}
                 <br>
-                <b-button @click="alarma" variant="outline-success">Enviar alarma</b-button>
-            </div>
-        </b-col>
+            </b-col>
+            <b-col>
+                <div>
+                    <br>
+                    Select a time: <input type="time" v-model="alarm" class="form-control">
+                    <br>
+                    <br>
+                    <b-button @click="alarma" variant="outline-success">Enviar alarma</b-button>
+                </div>
+            </b-col>
+        </div>
     </div>
 </template>
 
@@ -55,7 +79,15 @@ export default {
             .catch(function (error) {
                 console.log("ERROR: "+error);
             });
-        }
+        },
+        salir(){
+            let vue=this
+            console.log("Has salido")
+            localStorage.token = null
+            sessionStorage.clear();
+            localStorage.clear();
+            vue.$router.push('/auth')
+		}
     },
     created() {
         let vue = this;
