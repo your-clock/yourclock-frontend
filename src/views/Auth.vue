@@ -1,48 +1,67 @@
 <template>
-    <div class="text-center">
-        <b-overlay :show="loading" rounded="sm">
-            <img alt="Vue logo" src="../assets/logo.png" width="350px">
-            <h1>
-                Ingrese
-            </h1>
-            <br>
+    <b-overlay :show="loading" rounded="sm">
+        <div class="box-alerts">
             <div v-if="state == 305 || state == 306 || state == 307">
-                <b-alert show dismissible variant="warning">
-                    {{mensaje}}
-                </b-alert>
+                <alertClock class="lg warning" :msg="mensaje"/>
             </div>
             <div v-else-if="state == 308 || state == 400 || state == 401">
-                <b-alert show dismissible variant="danger">
-                    {{mensaje}}
-                </b-alert>
+                <alertClock class="lg danger" :msg="mensaje"/>
             </div>
-            <br>
-            Correo: <b-form-input :disabled="loading" type="email" v-model="userEmail" :state="comprobarEmail" size="sm" placeholder="Escriba su correo electronico"></b-form-input>
-            <br>
-            Contraseña: <b-form-input :disabled="loading" type="password" v-model="userPassword" :state="comprobarPassword" size="sm" placeholder="Escriba su contraseña"></b-form-input>
-            <br>
-            <div id=forgotPassword>
-                <b-link :disabled="loading" href="#/ForgotPassword">Olvide mi contraseña</b-link>
+        </div>
+        <div class="box-complete">
+            <div class="box-auth">
+                <div class="box-head">
+                    <img class="auth_user" src="../assets/auth.jpg">
+                    <titleClock id="title" v-bind:title="'Ingrese'"/>
+                </div>
+                <div class="box-inputs">
+                    <div class="box-input-email">
+                        <p>Correo:</p>
+                        <inputClock class="md input-email" :disabled="loading" type="email" placeholder="Escriba su correo electronico" v-bind:success="comprobarEmail" v-model="userEmail"/>
+                    </div>
+                    <div class="box-input-password">
+                        <p>Contraseña:</p>
+                        <inputClock class="md input-auth" :disabled="loading" type="password" placeholder="Escriba su contraseña" v-bind:success="comprobarPassword" v-model="userPassword"/>
+                    </div>
+                    <div class="box-button">
+                        <btnClock class="md" v-bind:name="'Ingresar'" v-bind:state="comprobarBtnEnviar" v-on:on-click="enviar"/>
+                    </div>
+                    <div class="box-link">
+                        <b-link :disabled="loading" href="#/ForgotPassword">Olvide mi contraseña</b-link>
+                        <b-link :disabled="loading" href="#/Login">No tengo una cuenta</b-link>
+                    </div>
+                    <div class="box-accounts">
+                        <p class="text-account">O ingrese con:</p>
+                        <div class="box-logos">
+                            <b-link :disabled="loading" @click="google">
+                                <img class="google_logo" src="../assets/logo_google_2.png">
+                            </b-link>
+                            <b-link :disabled="loading" @click="google">
+                                <img class="facebook_logo" src="../assets/logo_facebook_2.png">
+                            </b-link>
+                        </div>  
+                    </div>
+                </div>
             </div>
-            <br>
-            <div id=loginGoogle>
-                <b-link :disabled="loading" @click="google">Ingresa con Google</b-link>
-            </div>
-            <br>
-            <div id=ingresar>
-                <b-button :disabled="comprobarBtnEnviar" @click="enviar" variant="outline-success">Ingrese</b-button>
-            </div>
-            <br>
-            <br>
-        </b-overlay>
-    </div>
+        </div>
+    </b-overlay>
 </template>
 
 <script>
 import io from "socket.io-client"
+import alertClock from '@/components/atoms/alert-clock.vue';
+import titleClock from '@/components/atoms/title-clock.vue';
+import btnClock from '@/components/atoms/btn-clock.vue';
+import inputClock from '@/components/atoms/input-clock.vue';
 
 export default{
     name: 'auth',
+    components: {
+        titleClock, 
+        btnClock,
+        inputClock,
+        alertClock
+    },
     data(){
         return{
             state: "",
@@ -55,13 +74,13 @@ export default{
     },
     computed:{
         comprobarEmail(){
-            return this.userEmail.length >= 6 ? true : false
+            return this.userEmail.length == 0 ? 'null' : this.userEmail.length >= 6 ? 'true' : 'false'
         },
         comprobarPassword(){
-            return this.userPassword.length >= 8 ? true : false
+            return this.userPassword.length == 0 ? 'null' : this.userPassword.length >= 8 ? 'true' : 'false'
         },
         comprobarBtnEnviar(){
-            return this.comprobarPassword == true && this.comprobarEmail == true ? false : true
+            return this.comprobarPassword == 'true' && this.comprobarEmail == 'true' ? false : true
         }
     },  
     methods:{
@@ -126,3 +145,194 @@ export default{
     }
 }
 </script>
+
+<style scoped>
+#title{
+    color: black;
+}
+@media only screen and (max-width: 400px) {
+    /* For mobile phones: */
+    .auth_user{
+        width: 150px; height: 150px;
+    }
+    .text-account{
+        padding-bottom: 10px;
+    }
+    .facebook_logo{
+        width: 40px; height: 45px; margin-left: 13px; box-shadow: 0px 0px 5px black;
+    } 
+    .google_logo{
+        width: 40px; height: 45px; box-shadow: 0px 0px 5px black;
+    }
+    .box-login {
+        display: flex;
+        flex-direction: column;
+        background: transparent;
+    }
+    .box-head{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+    .box-inputs{
+        display: flex;
+        flex-direction: column;
+        padding: 20px 0px;
+    }
+    [class|="box-input"]{
+        display: flex;
+        flex-direction: column;
+        padding: 10px 0px 5px 0px;
+        align-self: stretch;
+    }
+    .box-link{
+        padding: 15px 0px 15px 0px;
+        display: flex;
+        flex-direction: column;
+        align-self: flex-end;
+    }
+    .box-button{
+        padding-top: 25px;
+    }
+    .box-complete{
+        background-color: white;
+        display: flex;
+        align-items: center;
+        height: 100vh;
+        justify-content: center;
+    }
+    .box-accounts{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+    p{
+        color: black;
+        width: 275px;
+        margin-bottom: 0rem;
+        padding-right: 11px;
+    }
+}
+
+@media only screen and (min-width: 400px) {
+    /* For tablets: */
+    .auth_user{
+        width: 200px; height: 200px;
+    }
+    .facebook_logo{
+        width: 45px; height: 50px; margin-left: 13px; box-shadow: 0px 0px 5px black;
+    } 
+    .google_logo{
+        width: 45px; height: 50px; box-shadow: 0px 0px 5px black;
+    }
+    .box-auth {
+        display: flex;
+        flex-direction: column;
+        background: transparent;
+    }
+    .box-head{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+    .box-inputs{
+        display: flex;
+        flex-direction: column;
+        padding: 20px 0px;
+    }
+    [class|="box-input"]{
+        display: flex;
+        flex-direction: column;
+        padding: 10px 0px 5px 0px;
+        align-self: stretch;
+    }
+    .box-button{
+        padding-top: 25px;
+    }
+    .box-complete{
+        background-color: white;
+        display: flex;
+        align-items: center;
+        height: 100vh;
+        justify-content: center;
+    }
+    .box-link{
+        padding: 15px 0px 25px 0px;
+        display: flex;
+        flex-direction: column;
+        align-self: flex-end;
+    }
+    .box-accounts{
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+    }
+    p{
+        color: black;
+        width: 275px;
+        margin-bottom: 0rem;
+        padding-right: 11px;
+    }
+}
+@media only screen and (min-width: 810px) {
+    /* For desktop: */
+    .auth_user{
+        width: 200px; height: 200px;
+    }
+    .facebook_logo{
+        width: 45px; height: 50px; margin-left: 15px; box-shadow: 0px 0px 3px white;
+    } 
+    .google_logo{
+        width: 45px; height: 50px; box-shadow: 0px 0px 3px white;
+    }
+    .box-auth {
+        display: flex;
+        flex-direction: row;
+        background: transparent;
+    }
+    .box-head{
+        align-self: center;
+        padding-right: 30px;
+    }
+    .box-inputs{
+        background: black;
+        box-shadow: 0px 0px 17px black;
+        display: flex;
+        flex-direction: column;
+        padding: 20px 30px;
+    }
+    [class|="box-input"]{
+        display: flex;
+        flex-direction: row;
+        padding: 6px 0px 5px 0px;
+        align-self: stretch;
+    }
+    .box-button{
+        padding-top: 10px;
+    }
+    .box-complete{
+        background-color: white;
+        display: flex;
+        align-items: center;
+        height: 100vh;
+        justify-content: center;
+    }
+    .box-link{
+        padding: 15px 0px 25px 0px;
+        display: flex;
+        flex-direction: column;
+        align-self: flex-end;
+    }
+    .box-accounts{
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+    }
+    p{
+        color: white;
+        width: 150px;
+        margin-bottom: 0rem;
+        padding-right: 11px;
+    }
+}
+</style>
