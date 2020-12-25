@@ -1,67 +1,87 @@
 <template>
-    <div class="mt-5 text-center">
-        <b-overlay :show="loading" rounded="sm">
-            <b-img 
-                center 
-                src="https://zero1.sg/img/accountlogin-icon.png" 
-                alt="Center image"
-                width="175px"
-            ></b-img>
-            <br>
-            <h1>
-                Registrese
-            </h1>
-            <br>
-            <div v-if="state == 305">
-                <b-alert show dismissible variant="warning">
-                    {{mensaje}}
-                </b-alert>
+    <b-overlay :show="loading" rounded="sm">
+        <div class="box-alerts">
+            <div v-if="state == 305 || state == 304">
+                <alertClock class="lg warning" :msg="mensaje"/>
             </div>
-            <div v-else-if="state == 304">
-                <b-alert show dismissible variant="warning">
-                    {{mensaje}}
-                </b-alert>
+            <div v-else-if="state == 400 || state == 402">
+                <alertClock class="lg danger" :msg="mensaje"/>
             </div>
-            <div v-else-if="state == 400">
-                <b-alert show dismissible variant="danger">
-                    {{mensaje}}
-                </b-alert>
+        </div>
+        <div class="box-complete">
+            <div class="box-login">
+                <div class="box-head">
+                    <img class="new_user" src="../assets/login.jpg">
+                    <titleClock id="title" v-bind:title="'Registrese'"/>
+                </div>
+                <div class="box-inputs">
+                    <div class="box-input-name1">
+                        <p>Primer nombre:</p>
+                        <inputClock class="md input-name1" :disabled="loading" type="text" placeholder="Escriba su primer nombre" v-bind:success="comprobarName1" v-model="userName1"/>
+                    </div>
+                    <div class="box-input-name2">
+                        <p>Segundo nombre:</p>
+                        <inputClock class="md input-name2" :disabled="loading" type="text" placeholder="Escriba su segundo nombre (opcional)" v-bind:success="comprobarName2" v-model="userName2" />
+                    </div>
+                    <div class="box-input-lastname1">
+                        <p>Primer apellido:</p>
+                        <inputClock class="md input-lastname1" :disabled="loading" type="text" placeholder="Escriba su primer apellido" v-bind:success="comprobarLastName1" v-model="userLastName1" />
+                    </div>
+                    <div class="box-input-lastname2">
+                        <p>Segundo apellido:</p>
+                        <inputClock class="md input-lastname2" :disabled="loading" type="text" placeholder="Escriba su segundo apellido (opcional)" v-bind:success="comprobarLastName2" v-model="userLastName2" />
+                    </div>
+                    <div class="box-input-email">
+                        <p>Correo:</p>
+                        <inputClock class="md input-email" :disabled="loading" type="email" placeholder="Escriba su correo electronico" v-bind:success="comprobarEmail" v-model="userEmail" />
+                    </div>
+                    <div class="box-input-password">  
+                        <p>Contraseña:</p>
+                        <inputClock class="md input-password" :disabled="loading" type="password" placeholder="Escriba una contraseña minimo de 8 caracteres" v-bind:success="comprobarPassword" v-model="userPassword" />
+                    </div>
+                    <div class="box-input-city"> 
+                        <p>Ciudad:</p>
+                        <inputClock class="md input-city" :disabled="loading" type="text" placeholder="Escriba su ciudad actual" v-bind:success="comprobarCity" v-model="userCity" />
+                    </div>
+                    <div v-if="seenWarning == true">
+                        <p class="text-error-email">Por favor digite un correo valido para continuar.</p>
+                    </div>
+                    <div class="box-button">
+                        <btnClock class="md" v-bind:name="'Registrarme'" v-bind:state="comprobarBtnEnviar" v-on:on-click="enviar"/>
+                    </div>
+                    <div class="box-link">
+                        <b-link :disabled="loading" href="#/Auth">Ya tengo una cuenta</b-link>
+                    </div>
+                </div>
             </div>
-            <div v-else-if="state == 402">
-                <b-alert show dismissible variant="danger">
-                    {{mensaje}}
-                </b-alert>
-            </div>
-            <br>
-            Primer nombre: <b-form-input type="text" v-model="userName1" :state="comprobarName1" size="sm" placeholder="Escriba su nombre completo"></b-form-input>
-            <br>
-            Segundo nombre: <b-form-input type="text" v-model="userName2" :state="comprobarName2" size="sm" placeholder="Escriba su nombre completo"></b-form-input>
-            <br>
-            Primer apellido: <b-form-input type="text" v-model="userLastName1" :state="comprobarLastName1" size="sm" placeholder="Escriba su nombre completo"></b-form-input>
-            <br>
-            Segundo apellido: <b-form-input type="text" v-model="userLastName2" :state="comprobarLastName2" size="sm" placeholder="Escriba su nombre completo"></b-form-input>
-            <br>
-            Correo: <b-form-input type="email" v-model="userEmail" :state="comprobarEmail" size="sm" placeholder="Escriba su correo electronico"></b-form-input>
-            <br>
-            Contraseña: <b-form-input type="password" v-model="userPassword" :state="comprobarPassword" size="sm" placeholder="Escriba una contraseña minimo de 8 caracteres"></b-form-input>
-            <br>
-            Ciudad: <b-form-input type="text" v-model="userCity" :state="comprobarCity" size="sm" placeholder="Escriba su ciudad actual"></b-form-input>
-            <br>
-            <div>
-                <b-button @click="enviar" :disabled="comprobarBtnEnviar" variant="outline-success">Registrarse</b-button>
-            </div>
-            <br>
-            <br>
-        </b-overlay>
-    </div>
+        </div>
+    </b-overlay>
 </template>
 
 <script>
 
 import router from 'vue-router'
+import alertClock from '@/components/atoms/alert-clock.vue';
+import titleClock from '@/components/atoms/title-clock.vue';
+import btnClock from '@/components/atoms/btn-clock.vue';
+import inputClock from '@/components/atoms/input-clock.vue';
 
 export default{
     name: 'Login',
+    components: {
+        titleClock, 
+        btnClock,
+        inputClock,
+        alertClock
+    },
+    metaInfo() {
+        return {
+            meta: [{
+                name: 'viewport',
+                content: "width=device-width, initial-scale=1.0",
+            }]
+        }
+    },
     data(){
         return{
             userName1: "",
@@ -73,39 +93,42 @@ export default{
             userCity: "",
             state: "",
             loading: false,
-            mensaje: ""
+            mensaje: "",
+            seenWarning: false
         }
     },
     computed:{
         comprobarName1(){
-            return this.userName1.length >= 1 ? true : false
+            return this.userName1.length == 0 ? 'null' : this.userName1.length >= 1 ? 'true' : 'false'
         },
         comprobarName2(){
-            return this.userName2.length >= 1 ? true : false
+            return this.userName2.length == 0 ? 'null' : this.userName2.length >= 1 ? 'true' : 'null'
         },
         comprobarLastName1(){
-            return this.userLastName1.length >= 1 ? true : false
+            return this.userLastName1.length == 0 ? 'null' : this.userLastName1.length >= 1 ? 'true' : 'false'
         },
         comprobarLastName2(){
-            return this.userLastName2.length >= 1 ? true : false
+            return this.userLastName2.length == 0 ? 'null' : this.userLastName2.length >= 1 ? 'true' : 'null'
         },
         comprobarEmail(){
-            return this.userEmail.length >= 6 ? true : false
+            return this.userEmail.length == 0 ? 'null' : this.userEmail.length >= 6 ? 'true' : 'false'
         },
         comprobarPassword(){
-            return this.userPassword.length >= 8 ? true : false
+            return this.userPassword.length == 0 ? 'null' : this.userPassword.length >= 8 ? 'true' : 'false'
         },
         comprobarCity(){
-            return this.userCity.length >= 1 ? true : false
+            return this.userCity.length == 0 ? 'null' : this.userCity.length >= 1 ? 'true' : 'false'
         },
         comprobarBtnEnviar(){
-            return this.comprobarName1 == true && this.comprobarLastName1  == true && this.comprobarEmail == true  && this.comprobarPassword == true && this.comprobarCity == true ? false : true
+            return this.comprobarName1 == 'true' && this.comprobarLastName1  == 'true' && this.comprobarEmail == 'true'  && this.comprobarPassword == 'true' && this.comprobarCity == 'true' ? false : true
         }
-    },  
+    },
     methods:{
         enviar(){
             let vue = this;
             vue.loading = true;
+            vue.state = 0
+            vue.seenWarning = false
             console.log("enviado")
             this.axios.post('/user/login', {
                 mail: this.userEmail,
@@ -126,10 +149,165 @@ export default{
                     vue.loading = false;
                 }
             }).catch(function (error) {
-                console.log("ERROR: "+error);
-                vue.$router.push('/error')
+                if(error.response.status >= 400 && error.response.status < 500){
+                    if(error.response.data.code == 305){
+                        console.log(error.response.data.code)
+                        vue.seenWarning = true
+                        vue.comprobarEmail = false
+                    }
+                    vue.loading = false;
+                    console.log(error.response.data);
+                }else{
+                    vue.$router.push('/error');
+                }
             });
         }
     }
 }
 </script>
+
+<style scoped>
+
+	.text-error-email {
+		font-family:-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+        color: #dc3545;
+		font-weight: 450;
+		font-size: 15px;
+        margin-top: 10px;
+	}
+
+    @media only screen and (max-width: 400px) {
+        /* For mobile phones: */
+        img{
+            width: 150px; height: 150px;
+        }
+        .box-login {
+            display: flex;
+            flex-direction: column;
+            background: transparent;
+        }
+        .box-head{
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .box-inputs{
+            display: flex;
+            flex-direction: column;
+            padding: 20px 0px;
+        }
+        [class|="box-input"]{
+            display: flex;
+            flex-direction: column;
+            padding: 10px 0px 5px 0px;
+            align-self: stretch;
+        }
+        .box-button{
+            padding-top: 25px;
+        }
+        .box-complete{
+            background-color: black;
+            display: flex;
+            align-items: center;
+            height: 100vh;
+            justify-content: center;
+        }
+        p{
+            color: white;
+            width: 275px;
+            margin-bottom: 0rem;
+            padding-right: 11px;
+        }
+    }
+
+    @media only screen and (min-width: 400px) {
+        /* For tablets: */
+        img{
+            width: 200px; height: 200px;
+        }
+        .box-login {
+            display: flex;
+            flex-direction: column;
+            background: transparent;
+        }
+        .box-head{
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .box-inputs{
+            display: flex;
+            flex-direction: column;
+            padding: 20px 0px;
+        }
+        [class|="box-input"]{
+            display: flex;
+            flex-direction: column;
+            padding: 10px 0px 5px 0px;
+            align-self: stretch;
+        }
+        .box-button{
+            padding-top: 25px;
+        }
+        .box-complete{
+            background-color: black;
+            display: flex;
+            align-items: center;
+            height: 100vh;
+            justify-content: center;
+        }
+        p{
+            color: white;
+            width: 275px;
+            margin-bottom: 0rem;
+            padding-right: 11px;
+        }
+    }
+    @media only screen and (min-width: 810px) {
+        /* For desktop: */
+        img{
+            width: 200px; height: 250px;
+        }
+        .box-login {
+            display: flex;
+            flex-direction: row;
+            background: transparent;
+        }
+        .box-head{
+            align-self: center;
+            padding-right: 20px;
+        }
+        .box-inputs{
+            background: white;
+            box-shadow: 0px 0px 17px white;
+            display: flex;
+            flex-direction: column;
+            padding: 20px 30px;
+        }
+        [class|="box-input"]{
+            display: flex;
+            flex-direction: row;
+            padding: 6px 0px 5px 0px;
+            align-self: stretch;
+        }
+        .box-button{
+            padding-top: 10px;
+        }
+        .box-complete{
+            background-color: black;
+            display: flex;
+            align-items: center;
+            height: 100vh;
+            justify-content: center;
+        }
+        .box-link{
+            padding-top: 15px;
+        }
+        p{
+            color: black;
+            width: 275px;
+            margin-bottom: 0rem;
+            padding-right: 11px;
+        }
+    }
+</style>

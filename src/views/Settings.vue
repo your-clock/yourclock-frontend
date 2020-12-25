@@ -1,8 +1,32 @@
 <template>
-    <div class="mt-5 text-center">
-        <br>
-        <div>
-            <b-button id="btnDeleteAccount" @click="eliminar" variant="outline-danger">Eliminar cuenta</b-button>
+    <div>
+        <b-navbar toggleable="md" style="backgroundColor:#C0C0C0">
+            <b-container>
+                <b-navbar-toggle target="nav-collapse">
+                </b-navbar-toggle>
+                <b-navbar-brand href="#/inicio">
+                    <img id=logo alt="Vue logo" src="@/assets/logo_clock.png" width="55px">
+                    Your Clock
+                </b-navbar-brand>
+                <b-collapse id="nav-collapse" is-nav>
+                    <b-navbar-nav class="ml-auto">
+                        <b-nav-item :to="{name: 'inicio'}">Inicio</b-nav-item>
+                <b-nav-item-dropdown right>
+                <template v-slot:button-content>
+                    <em>Cuenta</em>
+                </template>
+                <b-dropdown-item id=btn-settings href="#/Settings">Configuracion</b-dropdown-item>
+                <b-dropdown-item-button id=btn-logout @click="salir">Salir</b-dropdown-item-button>
+                </b-nav-item-dropdown>
+                    </b-navbar-nav>
+                </b-collapse>
+            </b-container>
+        </b-navbar>
+        <div class="mt-5 text-center">
+            <br>
+            <div>
+                <b-button id="btnDeleteAccount" @click="eliminar" variant="outline-danger">Eliminar cuenta</b-button>
+            </div>
         </div>
     </div>
 </template>
