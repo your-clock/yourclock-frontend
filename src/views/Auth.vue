@@ -11,7 +11,7 @@
         <div class="box-complete">
             <div class="box-auth">
                 <div class="box-head">
-                    <img class="auth_user" src="../assets/auth.jpg">
+                    <img class="auth_user" src="../assets/auth.jpg" alt="Imagen de autenticacion">
                     <titleClock id="title" v-bind:title="'Ingrese'"/>
                 </div>
                 <div class="box-inputs">
@@ -34,10 +34,10 @@
                         <p class="text-account">O ingrese con:</p>
                         <div class="box-logos">
                             <b-link :disabled="loading" @click="google">
-                                <img class="google_logo" src="../assets/logo_google_2.png">
+                                <img class="google_logo" src="../assets/logo_google_2.png" alt="Logo de Google">
                             </b-link>
                             <b-link :disabled="loading" @click="google">
-                                <img class="facebook_logo" src="../assets/logo_facebook_2.png">
+                                <img class="facebook_logo" src="../assets/logo_facebook_2.png" alt="Logo de Facebook">
                             </b-link>
                         </div>  
                     </div>

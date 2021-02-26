@@ -1,6 +1,6 @@
 <template>
     <div>
-        <b-navbar toggleable="md" style="backgroundColor:#C0C0C0">
+        <b-navbar toggleable="md" style="background-color:#C0C0C0">
             <b-container>
                 <b-navbar-toggle target="nav-collapse">
                 </b-navbar-toggle>
@@ -111,7 +111,7 @@ export default {
 
 <style scoped>
 	h1 {
-		font-family: Courier;
+		font-family: courier, courier new, serif;
 		text-align: center;
 		font-weight: 450;
 		font-size: 40px;

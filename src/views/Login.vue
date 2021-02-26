@@ -11,7 +11,7 @@
         <div class="box-complete">
             <div class="box-login">
                 <div class="box-head">
-                    <img class="new_user" src="../assets/login.jpg">
+                    <img class="new_user" src="../assets/login.jpg" alt="Imagen de registro">
                     <titleClock id="title" v-bind:title="'Registrese'"/>
                 </div>
                 <div class="box-inputs">
