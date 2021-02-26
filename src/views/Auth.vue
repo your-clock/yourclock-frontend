@@ -48,7 +48,6 @@
 </template>
 
 <script>
-import io from "socket.io-client"
 import alertClock from '@/components/atoms/alert-clock.vue';
 import titleClock from '@/components/atoms/title-clock.vue';
 import btnClock from '@/components/atoms/btn-clock.vue';
@@ -74,10 +73,16 @@ export default{
     },
     computed:{
         comprobarEmail(){
-            return this.userEmail.length == 0 ? 'null' : this.userEmail.length >= 6 ? 'true' : 'false'
+            if(this.userEmail.length == 0){
+                return 'null'
+            }
+            return this.userEmail.length >= 6 ? 'true' : 'false'
         },
         comprobarPassword(){
-            return this.userPassword.length == 0 ? 'null' : this.userPassword.length >= 8 ? 'true' : 'false'
+            if(this.userPassword.length == 0){
+                return 'null'
+            }
+            return this.userPassword.length >= 8 ? 'true' : 'false'
         },
         comprobarBtnEnviar(){
             return this.comprobarPassword == 'true' && this.comprobarEmail == 'true' ? false : true
@@ -92,26 +97,26 @@ export default{
             vue.axios.post('/user/auth',{
                 mail: this.userEmail,
                 pass: this.userPassword
-            }).then(function (response) {
-                vue.state = response.data.code
-                vue.mensaje = response.data.msg
-                if(response.data.code == 300 ){
+            }).then(function (responseAuth) {
+                vue.state = responseAuth.data.code
+                vue.mensaje = responseAuth.data.msg
+                if(responseAuth.data.code == 300 ){
                     console.log("usuario autenticado")
-                    localStorage.setItem("nombre", response.data.infoClient.nombre)
-                    localStorage.setItem("correo", response.data.infoClient.correo)
-                    localStorage.setItem("id", response.data.infoClient.id)
+                    localStorage.setItem("nombre", responseAuth.data.infoClient.nombre)
+                    localStorage.setItem("correo", responseAuth.data.infoClient.correo)
+                    localStorage.setItem("id", responseAuth.data.infoClient.id)
                     vue.axios.post('/token/createtoken',{
                         tokenData: {
                             nombre: localStorage.getItem("nombre"),
                             correo: localStorage.getItem("correo"),
                             id: localStorage.getItem("id")
                         }
-                    }).then(function(response){
-                        vue.state = response.data.code
-                        vue.mensaje = response.data.msg
-                        if(response.data.code == 300){
+                    }).then(function(responseToken){
+                        vue.state = responseToken.data.code
+                        vue.mensaje = responseToken.data.msg
+                        if(responseToken.data.code == 300){
                             console.log("token recibido")
-                            localStorage.setItem("token", response.data.token)
+                            localStorage.setItem("token", responseToken.data.token)
                             vue.$router.push('/inicio')
                         }else{
                             vue.loading = false

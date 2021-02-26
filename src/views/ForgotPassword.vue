@@ -1,81 +1,76 @@
 <template>
     <div class="mt-5 text-center">
-        <br>
-        <h1>
-            ¿Olvido o desea cambiar su contraseña?
-        </h1>
-        <br>
-        <a1>
-            Escriba su correo electronico, le enviaremos un mensaje para reestablecerla.
-        </a1>
-        <br>
-        <br>
-        <div v-if='state == 400'>
-            <b-alert show dismissible variant="warning">
-                Error, compruebe su conexion e intentelo de nuevo
-            </b-alert>
+        <h2>¿Olvido o desea cambiar su contraseña?</h2>
+        <a1>Escriba su correo electronico, le enviaremos un mensaje para reestablecerla.</a1>
+        <div class="box-alerts">
+            <div v-if='state == 306'>
+                <alertClock class="lg danger" :msg="mensaje"/>
+            </div>
+            <div v-else-if='state == 307'>
+                <alertClock class="lg warning" :msg="mensaje"/>
+            </div>
         </div>
-        <div v-else-if='state == 402'>
-            <b-alert show dismissible variant="warning">
-                Error al enviar el correo, verifique su conexion, si el error persiste, intente mas tarde
-            </b-alert>
-        </div>
-        <div v-else-if='state == 307'>
-            <b-alert show dismissible variant="warning">
-                Correo incorrecto o inexistente, intentelo de nuevo
-            </b-alert>
-        </div>
-        <div v-else-if="state == 305">
-            <b-alert show dismissible variant="warning">
-                Llene todos los campos para completar el registro
-            </b-alert>
-        </div>
-        <br>
-        Correo: <b-form-input type="email" v-model="userEmail" :state="comprobarEmail" size="sm" placeholder="Escriba su correo electronico"></b-form-input>
-        <br>
+        <p>Correo:</p>
+        <inputClock class="md input-name1" type="email" placeholder="Escriba su correo electronico" v-bind:success="comprobarEmail" v-model="userEmail"/>
         <div>
-            <b-button @click="enviar" variant="outline-success">Enviar</b-button>
+            <btnClock class="md" v-bind:name="'Enviar'" v-bind:state="comprobarBtnEnviar" v-on:on-click="enviar"/>
         </div>
-        <br>
-        <br>
     </div>
 </template>
 
 <script>
 
-import router from 'vue-router'
+import alertClock from '@/components/atoms/alert-clock.vue';
+import titleClock from '@/components/atoms/title-clock.vue';
+import btnClock from '@/components/atoms/btn-clock.vue';
+import inputClock from '@/components/atoms/input-clock.vue';
 
 export default {
     name: 'forgotpassword',
+    components: {
+        titleClock, 
+        btnClock,
+        inputClock,
+        alertClock
+    },
     data(){
         return{
             userEmail: "",
+            mensaje: "",
             state: ""
         }
     },
     computed:{
         comprobarEmail(){
-            return this.userEmail.length > 0 ? true : false
+            return this.userEmail.length == 0 ? 'null' : this.userEmail.length >= 6 ? 'true' : 'false'
+        },
+        comprobarBtnEnviar(){
+            return this.comprobarEmail == 'true' ? false : true
         }
     },
     methods:{
         enviar(){
             let vue = this
+            vue.state = 0
             console.log("enviado")
             this.axios.post('/user/forgotpassword',{
                 mail: this.userEmail
             })
             .then(function(response){
-                console.log(response.data)
-                vue.state = response.data
-                if(response.data == 300){
-                    alert("Mensaje enviado exitosamente, verifique su correo para cambiar su contraseña")
+                console.log(response)
+                if(response.data.code == 300){
+                    alert(response.data.msg)
                     vue.$router.push('/')
                 }
             })
             .catch(function(error){
-                console.log("ERROR: "+error)
-                vue.$router.push('/error')
+                if(error.response.status >= 400 && error.response.status < 500){
+                    vue.state = error.response.data.code
+                    vue.mensaje = error.response.data.msg
+                }else{
+                    console.log("ERROR: "+error)
+                    vue.$router.push('/error')
+                }
             });
         }
     }

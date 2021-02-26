@@ -9,7 +9,6 @@
 
 <script>
 
-import router from 'vue-router'
 import alertClock from '@/components/atoms/alert-clock.vue';
 import titleClock from '@/components/atoms/title-clock.vue';
 import btnClock from '@/components/atoms/btn-clock.vue';
