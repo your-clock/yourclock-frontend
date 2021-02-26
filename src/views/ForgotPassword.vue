@@ -42,7 +42,10 @@ export default {
     },
     computed:{
         comprobarEmail(){
-            return this.userEmail.length == 0 ? 'null' : this.userEmail.length >= 6 ? 'true' : 'false'
+            if(this.userEmail.length == 0){
+                return 'null'
+            }
+            return this.userEmail.length >= 6 ? 'true' : 'false'
         },
         comprobarBtnEnviar(){
             return this.comprobarEmail == 'true' ? false : true
