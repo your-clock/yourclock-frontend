@@ -1,6 +1,7 @@
 {
-  "name": "frontend-vue",
-  "version": "0.1.0",
+  "name": "your-clock",
+  "version": "1.0.1",
+  "description": "Frontend de la pagina de Your-clock hecho en vueJS",
   "private": true,
   "scripts": {
     "start": "npm run buildProd && node app.js",

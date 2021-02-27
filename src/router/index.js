@@ -117,57 +117,30 @@ router.beforeEach((to, from, next)=> {
   if(localStorage.getItem('token') == undefined){
     localStorage.setItem('token', null)
   }
-  let autorizacion = to.matched.some(record => record.meta.autentificado)
-  axios.post('/token/verifytoken',{
+
+  var autorizacion = to.matched.some(record => record.meta.autentificado)
+
+  if(autorizacion){
+    axios.post('/token/verifytoken',{
       token: localStorage.token
-  })
-  .then(function (response) {
-    let verificacion = response.data
-    if(autorizacion && !verificacion){                   // si necesita autorizacion y no tiene un token valido
-      alert("Lo sentimos, debe registrarse para continuar")
-      next('auth')
-    }else if(autorizacion && verificacion){             // si necesita autorizacion y tiene un token valido
-      axios.post('/token/updatetoken',{
-        token: localStorage.token
-      })
-      .then(function(response){
-        if(response.data.code == 300){
-          localStorage.setItem("token", response.data.token)
-          next()
-        }else{
-          console.log(response.data.msg);
-          next('error')
-        }
-      })
-      .catch(function(error){
-        console.log("ERROR: "+error);
-        next('error')
-      })
-    }else if(!autorizacion && verificacion){            // si no necesita autorizacion y tiene un token valido
-      axios.post('/token/updatetoken',{
-        token: localStorage.token
-      })
-      .then(function(response){
-        if(response.data.code == 300){
-          localStorage.setItem("token", response.data.token)
-          next()
-        }else{
-          console.log(response.data.msg);
-          next('error')
-        }
-      })
-      .catch(function(error){
-        console.log("ERROR: "+error);
-        next('error')
-      })
-    }else if(!autorizacion && !verificacion){            // si no necesita autorizacion y no tiene un token valido
-      next()
-    }
-  })
-  .catch(function (error) {
+    })
+    .then(function(response){
+      var verificacion = response.data
+      if(verificacion){
+        next()
+      }else{
+        alert("Lo sentimos, debe registrarse para continuar")
+        next('auth')
+      }
+    })
+    .catch(function(error){
       console.log("ERROR: "+error);
       next('error')
-  });
+    })
+  }else{
+    next()
+  }
+  
 })
 
 export default router
