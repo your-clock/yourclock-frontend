@@ -1,5 +1,6 @@
 <template>
-    <b-overlay :show="loading" rounded="sm">
+    <!-- <b-overlay :show="loading" rounded="sm"> -->
+    <div>
         <div class="box-alerts">
             <div v-if="state == 305 || state == 306 || state == 307">
                 <alertClock class="lg warning" :msg="mensaje"/>
@@ -27,40 +28,29 @@
                         <btnClock class="md" v-bind:name="'Ingresar'" v-bind:state="comprobarBtnEnviar" v-on:on-click="enviar"/>
                     </div>
                     <div class="box-link">
-                        <b-link :disabled="loading" href="#/ForgotPassword">Olvide mi contraseña</b-link>
-                        <b-link :disabled="loading" href="#/Login">No tengo una cuenta</b-link>
+                        <p :disabled="loading" href="#/ForgotPassword">Olvide mi contraseña</p>
+                        <p :disabled="loading" href="#/Login">No tengo una cuenta</p>
                     </div>
                     <div class="box-accounts">
                         <p class="text-account">O ingrese con:</p>
                         <div class="box-logos">
-                            <b-link :disabled="loading" @click="google">
-                                <img class="facebook_logo" src="../assets/logo_facebook_2.png">
-                            </b-link>
+                            <logoGoogle class="google_logo"/>
+                            <logoFacebook class="facebook_logo"/>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </b-overlay>
+    </div>
+    <!-- </b-overlay> -->
 </template>
 
 <script>
 import io from "socket.io-client"
-import logoGoogle from '@your-clock/yourclock-webcomponents-lib/src/components/logo-google'
-import alertClock from '@/components/atoms/alert-clock.vue';
-import titleClock from '@/components/atoms/title-clock.vue';
-import btnClock from '@/components/atoms/btn-clock.vue';
-import inputClock from '@/components/atoms/input-clock.vue';
+import { defineComponent } from 'vue';
 
-export default{
+export default defineComponent({
     name: 'auth',
-    components: {
-        logoGoogle,
-        titleClock, 
-        btnClock,
-        inputClock,
-        alertClock
-    },
     data(){
         return{
             state: "",
@@ -142,7 +132,7 @@ export default{
             });
         }
     }
-}
+});
 </script>
 
 <style scoped>

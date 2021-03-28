@@ -1,20 +1,12 @@
-import Vue from 'vue'
+import { createApp } from 'vue';
 import App from './App.vue'
 import router from './router'
 import store from './store'
-import BootstrapVue from 'bootstrap-vue'
 import VueMeta from 'vue-meta'
 import axios from 'axios'
 import VueAxios from 'vue-axios'
+import components from '@your-clock/yourclock-webcomponents-lib'
 require('dotenv').config();
-
-Vue.use(BootstrapVue)
-Vue.use(VueMeta)
-
-import 'bootstrap/dist/css/bootstrap.css'
-import 'bootstrap-vue/dist/bootstrap-vue.css'
-
-Vue.use(VueAxios, axios)
 
 // Agregamos la URL base de nuestra API
 if(process.env.NODE_ENV === "production"){
@@ -26,10 +18,11 @@ if(process.env.NODE_ENV === "production"){
 console.log(axios.defaults.baseURL)
 console.log(process.env.NODE_ENV)
 
-Vue.config.productionTip = false
+const app = createApp(App)
 
-new Vue({
-  router,
-  store,
-  render: h => h(App)
-}).$mount('#app')
+app.use(VueAxios, axios)
+app.use(router)
+app.use(store)
+app.use(components)
+
+app.mount('#app')

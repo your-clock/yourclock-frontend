@@ -5,22 +5,22 @@
         </h1>
         <br>
         <div v-if="state == 305">
-            <b-alert show dismissible variant="warning">
+            <!-- <b-alert show dismissible variant="warning">
                 Llene todos los campos para completar el registro
-            </b-alert>
+            </b-alert> -->
         </div>
         <div v-else-if="state == 400">
-            <b-alert show dismissible variant="warning">
+            <!-- <b-alert show dismissible variant="warning">
                 Error, compruebe su conexion e intentelo de nuevo
-            </b-alert>
+            </b-alert> -->
         </div>
         <br>
-        Nueva contraseña: <b-form-input type="password" v-model="userPassword" :state="comprobarPassword" size="sm" placeholder="Escriba su contraseña"></b-form-input>
+        <!-- Nueva contraseña: <b-form-input type="password" v-model="userPassword" :state="comprobarPassword" size="sm" placeholder="Escriba su contraseña"></b-form-input> -->
         <br>
-        Repita la contraseña: <b-form-input type="password" v-model="userPasswordVerification" :state="comprobarPasswordVerification" size="sm" placeholder="Escriba de nuevo su contraseña"></b-form-input>
+        <!-- Repita la contraseña: <b-form-input type="password" v-model="userPasswordVerification" :state="comprobarPasswordVerification" size="sm" placeholder="Escriba de nuevo su contraseña"></b-form-input> -->
         <br>
         <div>
-            <b-button @click="enviar" variant="outline-success">Cambiar</b-button>
+            <!-- <b-button @click="enviar" variant="outline-success">Cambiar</b-button> -->
         </div>
     </div>
 </template>

@@ -1,7 +1,7 @@
 <template>
     <div class="mt-5 text-center">
-        <b-overlay :show="true" rounded="sm">
-        </b-overlay>
+        <!-- <b-overlay :show="true" rounded="sm">
+        </b-overlay> -->
     </div>
 </template>
 

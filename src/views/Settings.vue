@@ -1,6 +1,6 @@
 <template>
     <div>
-        <b-navbar toggleable="md" style="backgroundColor:#C0C0C0">
+        <!-- <b-navbar toggleable="md" style="backgroundColor:#C0C0C0">
             <b-container>
                 <b-navbar-toggle target="nav-collapse">
                 </b-navbar-toggle>
@@ -21,11 +21,11 @@
                     </b-navbar-nav>
                 </b-collapse>
             </b-container>
-        </b-navbar>
+        </b-navbar> -->
         <div class="mt-5 text-center">
             <br>
             <div>
-                <b-button id="btnDeleteAccount" @click="eliminar" variant="outline-danger">Eliminar cuenta</b-button>
+                <!-- <b-button id="btnDeleteAccount" @click="eliminar" variant="outline-danger">Eliminar cuenta</b-button> -->
             </div>
         </div>
     </div>

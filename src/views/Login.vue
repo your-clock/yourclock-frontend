@@ -1,5 +1,6 @@
 <template>
-    <b-overlay :show="loading" rounded="sm">
+    <!-- <b-overlay :show="loading" rounded="sm"> -->
+    <div>
         <div class="box-alerts">
             <div v-if="state == 305 || state == 304">
                 <alertClock class="lg warning" :msg="mensaje"/>
@@ -50,30 +51,21 @@
                         <btnClock class="md" v-bind:name="'Registrarme'" v-bind:state="comprobarBtnEnviar" v-on:on-click="enviar"/>
                     </div>
                     <div class="box-link">
-                        <b-link :disabled="loading" href="#/Auth">Ya tengo una cuenta</b-link>
+                        <p :disabled="loading" href="#/Auth">Ya tengo una cuenta</p>
                     </div>
                 </div>
             </div>
         </div>
-    </b-overlay>
+    </div>
+    <!-- </b-overlay> -->
 </template>
 
 <script>
 
 import router from 'vue-router'
-import alertClock from '@/components/atoms/alert-clock.vue';
-import titleClock from '@/components/atoms/title-clock.vue';
-import btnClock from '@/components/atoms/btn-clock.vue';
-import inputClock from '@/components/atoms/input-clock.vue';
 
 export default{
     name: 'Login',
-    components: {
-        titleClock, 
-        btnClock,
-        inputClock,
-        alertClock
-    },
     metaInfo() {
         return {
             meta: [{

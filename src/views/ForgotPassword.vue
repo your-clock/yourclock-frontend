@@ -11,30 +11,22 @@
         <br>
         <br>
         <div v-if='state == 400'>
-            <b-alert show dismissible variant="warning">
-                Error, compruebe su conexion e intentelo de nuevo
-            </b-alert>
+
         </div>
         <div v-else-if='state == 402'>
-            <b-alert show dismissible variant="warning">
-                Error al enviar el correo, verifique su conexion, si el error persiste, intente mas tarde
-            </b-alert>
+
         </div>
         <div v-else-if='state == 307'>
-            <b-alert show dismissible variant="warning">
-                Correo incorrecto o inexistente, intentelo de nuevo
-            </b-alert>
+
         </div>
         <div v-else-if="state == 305">
-            <b-alert show dismissible variant="warning">
-                Llene todos los campos para completar el registro
-            </b-alert>
+
         </div>
         <br>
-        Correo: <b-form-input type="email" v-model="userEmail" :state="comprobarEmail" size="sm" placeholder="Escriba su correo electronico"></b-form-input>
+        Correo: 
         <br>
         <div>
-            <b-button @click="enviar" variant="outline-success">Enviar</b-button>
+
         </div>
         <br>
         <br>
