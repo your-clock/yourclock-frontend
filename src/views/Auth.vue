@@ -34,12 +34,9 @@
                         <p class="text-account">O ingrese con:</p>
                         <div class="box-logos">
                             <b-link :disabled="loading" @click="google">
-                                <img class="google_logo" src="../assets/logo_google_2.png">
-                            </b-link>
-                            <b-link :disabled="loading" @click="google">
                                 <img class="facebook_logo" src="../assets/logo_facebook_2.png">
                             </b-link>
-                        </div>  
+                        </div>
                     </div>
                 </div>
             </div>
@@ -49,6 +46,7 @@
 
 <script>
 import io from "socket.io-client"
+import logoGoogle from '@your-clock/yourclock-webcomponents-lib/src/components/logo-google'
 import alertClock from '@/components/atoms/alert-clock.vue';
 import titleClock from '@/components/atoms/title-clock.vue';
 import btnClock from '@/components/atoms/btn-clock.vue';
@@ -57,6 +55,7 @@ import inputClock from '@/components/atoms/input-clock.vue';
 export default{
     name: 'auth',
     components: {
+        logoGoogle,
         titleClock, 
         btnClock,
         inputClock,
