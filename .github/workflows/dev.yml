@@ -27,4 +27,3 @@ jobs:
         args: >
           -Dsonar.branch.target=dev
           -Dsonar.branch.name=dev
-          
