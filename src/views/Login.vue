@@ -1,6 +1,6 @@
 <template>
-    <!-- <b-overlay :show="loading" rounded="sm"> -->
-    <div>
+    <div id="login">
+        <overlayClock :show="loading" :msg="'Cargando...'"/>
         <div class="box-alerts">
             <div v-if="state == 305 || state == 304">
                 <alertClock class="lg warning" :msg="mensaje"/>
@@ -51,13 +51,12 @@
                         <btnClock class="md" v-bind:name="'Registrarme'" v-bind:state="comprobarBtnEnviar" v-on:on-click="enviar"/>
                     </div>
                     <div class="box-link">
-                        <p :disabled="loading" href="#/Auth">Ya tengo una cuenta</p>
+                        <textBtnClock :disabled="loading" v-bind:href="'#/Auth'" v-bind:name="'Ya tengo una cuenta'"/>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <!-- </b-overlay> -->
 </template>
 
 <script>

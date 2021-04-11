@@ -1,6 +1,6 @@
 <template>
-    <!-- <b-overlay :show="loading" rounded="sm"> -->
-    <div>
+    <div id="auth">
+        <overlayClock :show="loading" :msg="'Cargando...'"/>
         <div class="box-alerts">
             <div v-if="state == 305 || state == 306 || state == 307">
                 <alertClock class="lg warning" :msg="mensaje"/>
@@ -28,21 +28,20 @@
                         <btnClock class="md" v-bind:name="'Ingresar'" v-bind:state="comprobarBtnEnviar" v-on:on-click="enviar"/>
                     </div>
                     <div class="box-link">
-                        <p :disabled="loading" href="#/ForgotPassword">Olvide mi contraseña</p>
-                        <p :disabled="loading" href="#/Login">No tengo una cuenta</p>
+                        <textBtnClock :disabled="loading" v-bind:href="'#/ForgotPassword'" v-bind:name="'Olvidé mi contraseña'"/>
+                        <textBtnClock :disabled="loading" v-bind:href="'#/Login'" v-bind:name="'No tengo una cuenta'"/>
                     </div>
                     <div class="box-accounts">
                         <p class="text-account">O ingrese con:</p>
                         <div class="box-logos">
-                            <logoGoogle class="google_logo"/>
-                            <logoFacebook class="facebook_logo"/>
+                            <logoGoogle class="google_logo" v-on:on-click="google"/>
+                            <logoFacebook class="facebook_logo" v-on:on-click="google"/>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <!-- </b-overlay> -->
 </template>
 
 <script>
@@ -58,7 +57,8 @@ export default defineComponent({
             userPassword: "",
             loading: false,
             mensaje: "",
-            socket: {}
+            socket: {},
+            href: ""
         }
     },
     computed:{
@@ -195,6 +195,10 @@ export default defineComponent({
         flex-direction: column;
         align-items: center;
     }
+    .box-logos{
+        display: flex;
+        flex-direction: row;
+    }
     p{
         color: black;
         width: 275px;
@@ -256,6 +260,10 @@ export default defineComponent({
         flex-direction: row;
         justify-content: space-between;
     }
+    .box-logos{
+        display: flex;
+        flex-direction: row;
+    }
     p{
         color: black;
         width: 275px;
@@ -269,10 +277,10 @@ export default defineComponent({
         width: 200px; height: 200px;
     }
     .facebook_logo{
-        width: 45px; height: 50px; margin-left: 15px; box-shadow: 0px 0px 3px white;
+        width: 40px; height: 50px; margin-left: 15px; box-shadow: 0px 0px 3px white;
     } 
     .google_logo{
-        width: 45px; height: 50px; box-shadow: 0px 0px 3px white;
+        width: 40px; height: 50px; box-shadow: 0px 0px 3px white;
     }
     .box-auth {
         display: flex;
@@ -316,6 +324,10 @@ export default defineComponent({
         display: flex;
         flex-direction: row;
         justify-content: space-between;
+    }
+    .box-logos{
+        display: flex;
+        flex-direction: row;
     }
     p{
         color: white;
