@@ -12,7 +12,7 @@
         <div class="box-complete">
             <div class="box-auth">
                 <div class="box-head">
-                    <img class="auth_user" src="../assets/auth.jpg" alt="Imagen de autenticacion">
+                    <img class="auth_user" src="../assets/auth.jpg">
                     <titleClock id="title" v-bind:title="'Ingrese'"/>
                 </div>
                 <div class="box-inputs">
@@ -63,16 +63,10 @@ export default defineComponent({
     },
     computed:{
         comprobarEmail(){
-            if(this.userEmail.length == 0){
-                return 'null'
-            }
-            return this.userEmail.length >= 6 ? 'true' : 'false'
+            return this.userEmail.length == 0 ? 'null' : this.userEmail.length >= 6 ? 'true' : 'false'
         },
         comprobarPassword(){
-            if(this.userPassword.length == 0){
-                return 'null'
-            }
-            return this.userPassword.length >= 8 ? 'true' : 'false'
+            return this.userPassword.length == 0 ? 'null' : this.userPassword.length >= 8 ? 'true' : 'false'
         },
         comprobarBtnEnviar(){
             return this.comprobarPassword == 'true' && this.comprobarEmail == 'true' ? false : true
@@ -87,24 +81,24 @@ export default defineComponent({
             vue.axios.post('/user/auth',{
                 mail: this.userEmail,
                 pass: this.userPassword
-            }).then(function (responseAuth) {
-                vue.state = responseAuth.data.code
-                vue.mensaje = responseAuth.data.msg
-                if(responseAuth.data.code == 300 ){
+            }).then(function (response) {
+                vue.state = response.data.code
+                vue.mensaje = response.data.msg
+                if(response.data.code == 300 ){
                     console.log("usuario autenticado")
-                    localStorage.setItem("nombre", responseAuth.data.infoClient.nombre)
-                    localStorage.setItem("correo", responseAuth.data.infoClient.correo)
-                    localStorage.setItem("id", responseAuth.data.infoClient.id)
+                    localStorage.setItem("nombre", response.data.infoClient.nombre)
+                    localStorage.setItem("correo", response.data.infoClient.correo)
+                    localStorage.setItem("id", response.data.infoClient.id)
                     vue.axios.post('/token/createtoken',{
                         tokenData: {
                             nombre: localStorage.getItem("nombre"),
                             correo: localStorage.getItem("correo"),
                             id: localStorage.getItem("id")
                         }
-                    }).then(function(responseToken){
-                        vue.state = responseToken.data.code
-                        vue.mensaje = responseToken.data.msg
-                        if(responseToken.data.code == 300){
+                    }).then(function(response){
+                        vue.state = response.data.code
+                        vue.mensaje = response.data.msg
+                        if(response.data.code == 300){
                             console.log("token recibido")
                             localStorage.setItem("uuid", response.data.uuid)
                             vue.$router.push('/inicio')

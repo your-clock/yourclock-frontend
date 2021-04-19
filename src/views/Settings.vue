@@ -62,15 +62,7 @@ export default{
                 console.log("ERROR: "+error);
                 vue.$router.push('/error')
             });
-        },
-        salir(){
-            let vue=this
-            console.log("Has salido")
-            localStorage.token = null
-            sessionStorage.clear();
-            localStorage.clear();
-            vue.$router.push('/auth')
-		}
+        }
     }
 }
 </script>

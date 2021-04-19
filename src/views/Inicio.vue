@@ -74,7 +74,7 @@ export default {
 
 <style scoped>
 	h1 {
-		font-family: courier, courier new, serif;
+		font-family: Courier;
 		text-align: center;
 		font-weight: 450;
 		font-size: 40px;

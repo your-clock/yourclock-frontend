@@ -1,14 +1,14 @@
 <template>
   <div id="app">
-    <router-view />
+    <router-view/>
   </div>
 </template>
 
 <script>
 export default {
-  name: "app",
+  name: 'app',
   metaInfo: {
-    title: "Your clock ⏲",
+    title: 'Your clock ⏲'
   },
   data(){
     return{

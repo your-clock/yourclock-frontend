@@ -29,6 +29,8 @@
 
 <script>
 
+import router from 'vue-router'
+
 export default {
     name: "recoverypassword",
     data(){

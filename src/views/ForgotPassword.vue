@@ -29,65 +29,46 @@
         <div>
             <btnClock class="md" v-bind:name="'Enviar'" v-on:on-click="enviar"/>
         </div>
+        <br>
+        <br>
     </div>
 </template>
 
 <script>
 
-import alertClock from '@/components/atoms/alert-clock.vue';
-import titleClock from '@/components/atoms/title-clock.vue';
-import btnClock from '@/components/atoms/btn-clock.vue';
-import inputClock from '@/components/atoms/input-clock.vue';
+import router from 'vue-router'
 
 export default {
     name: 'forgotpassword',
-    components: {
-        titleClock, 
-        btnClock,
-        inputClock,
-        alertClock
-    },
     data(){
         return{
             userEmail: "",
-            mensaje: "",
             state: ""
         }
     },
     computed:{
         comprobarEmail(){
-            if(this.userEmail.length == 0){
-                return 'null'
-            }
-            return this.userEmail.length >= 6 ? 'true' : 'false'
-        },
-        comprobarBtnEnviar(){
-            return this.comprobarEmail == 'true' ? false : true
+            return this.userEmail.length > 0 ? true : false
         }
     },
     methods:{
         enviar(){
             let vue = this
-            vue.state = 0
             console.log("enviado")
             this.axios.post('/user/forgotpassword',{
                 mail: this.userEmail
             })
             .then(function(response){
-                console.log(response)
-                if(response.data.code == 300){
-                    alert(response.data.msg)
+                console.log(response.data)
+                vue.state = response.data
+                if(response.data == 300){
+                    alert("Mensaje enviado exitosamente, verifique su correo para cambiar su contraseña")
                     vue.$router.push('/')
                 }
             })
             .catch(function(error){
-                if(error.response.status >= 400 && error.response.status < 500){
-                    vue.state = error.response.data.code
-                    vue.mensaje = error.response.data.msg
-                }else{
-                    console.log("ERROR: "+error)
-                    vue.$router.push('/error')
-                }
+                console.log("ERROR: "+error)
+                vue.$router.push('/error')
             });
         }
     }
