@@ -12,7 +12,7 @@
         <div class="box-complete">
             <div class="box-login">
                 <div class="box-head">
-                    <img class="new_user" src="../assets/login.jpg">
+                    <img class="new_user" src="../assets/login.jpg" alt="Imagen de registro">
                     <titleClock id="title" v-bind:title="'Registrese'"/>
                 </div>
                 <div class="box-inputs">
@@ -90,25 +90,46 @@ export default{
     },
     computed:{
         comprobarName1(){
-            return this.userName1.length == 0 ? 'null' : this.userName1.length >= 1 ? 'true' : 'false'
+            if(this.userName1.length == 0){
+                return 'null'
+            }
+            return this.userName1.length >= 1 ? 'true' : 'false'
         },
         comprobarName2(){
-            return this.userName2.length == 0 ? 'null' : this.userName2.length >= 1 ? 'true' : 'null'
+            if(this.userName2.length == 0){
+                return 'null'
+            }
+            return this.userName2.length >= 1 ? 'true' : 'null'
         },
         comprobarLastName1(){
-            return this.userLastName1.length == 0 ? 'null' : this.userLastName1.length >= 1 ? 'true' : 'false'
+            if(this.userLastName1.length == 0){
+                return 'null'
+            }
+            return this.userLastName1.length >= 1 ? 'true' : 'false'
         },
         comprobarLastName2(){
-            return this.userLastName2.length == 0 ? 'null' : this.userLastName2.length >= 1 ? 'true' : 'null'
+            if(this.userLastName2.length == 0){
+                return 'null'
+            }
+            return this.userLastName2.length >= 1 ? 'true' : 'null'
         },
         comprobarEmail(){
-            return this.userEmail.length == 0 ? 'null' : this.userEmail.length >= 6 ? 'true' : 'false'
+            if(this.userEmail.length == 0){
+                return 'null'
+            }
+            return this.userEmail.length >= 6 ? 'true' : 'false'
         },
         comprobarPassword(){
-            return this.userPassword.length == 0 ? 'null' : this.userPassword.length >= 8 ? 'true' : 'false'
+            if(this.userPassword.length == 0){
+                return 'null'
+            }
+            return this.userPassword.length >= 8 ? 'true' : 'false'
         },
         comprobarCity(){
-            return this.userCity.length == 0 ? 'null' : this.userCity.length >= 1 ? 'true' : 'false'
+            if(this.userCity.length == 0){
+                return 'null'
+            }
+            return this.userCity.length >= 1 ? 'true' : 'false'
         },
         comprobarBtnEnviar(){
             return this.comprobarName1 == 'true' && this.comprobarLastName1  == 'true' && this.comprobarEmail == 'true'  && this.comprobarPassword == 'true' && this.comprobarCity == 'true' ? false : true
