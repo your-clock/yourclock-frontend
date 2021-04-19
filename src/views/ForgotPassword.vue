@@ -24,9 +24,10 @@
         </div>
         <br>
         Correo: 
+        <inputClock class="md" type="email" placeholder="Escriba su correo electronico" v-bind:success="comprobarEmail" v-model="userEmail" />
         <br>
         <div>
-
+            <btnClock class="md" v-bind:name="'Enviar'" v-on:on-click="enviar"/>
         </div>
         <br>
         <br>

@@ -1,6 +1,11 @@
 <template>
     <div>
         <div class="mt-5 text-center">
+            <br>
+            temperatura ambiente: {{datos.temp_amb}}
+            <br>
+            temperatura local: {{datos.temp_local}}
+            <br>
         </div>
     </div>
 </template>
@@ -17,8 +22,8 @@ export default {
             URL: "",
             token: localStorage.token,
             datos: {
-                temperatura_amb: 0,
-                temperatura_local: 0
+                temp_amb: 0,
+                temp_local: 0
             },
             userInfo:{
                 nombre: Buffer.from(localStorage.nombre, 'base64').toString('ascii'),
