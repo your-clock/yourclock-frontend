@@ -1,6 +1,5 @@
 <template>
     <div class="mb-2 text-center">
-        <b-img :src="require('../assets/error.jpg')" fluid alt="Responsive image"></b-img>
         <br>
         <br>
         <h3> Lo sentimos, ha ocurrido un error :(</h3>
@@ -10,6 +9,8 @@
 </template>
 
 <script>
+
+import router from 'vue-router'
 
 export default {
     name: "error"

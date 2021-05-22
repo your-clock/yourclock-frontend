@@ -1,14 +1,14 @@
 <template>
     <div class="mt-5 text-center">
         <div v-if="state == 305">
-            <b-alert show dismissible variant="warning">
+            <!-- <b-alert show dismissible variant="warning">
                 Llene todos los campos para completar el registro
-            </b-alert>
+            </b-alert> -->
         </div>
         <div v-else-if="state == 400">
-            <b-alert show dismissible variant="danger">
+            <!-- <b-alert show dismissible variant="danger">
                 Error, compruebe su conexion e intentelo de nuevo
-            </b-alert>
+            </b-alert> -->
         </div>
         <br>
     </div>

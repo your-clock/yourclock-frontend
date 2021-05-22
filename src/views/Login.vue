@@ -1,5 +1,6 @@
 <template>
-    <b-overlay :show="loading" rounded="sm">
+    <div id="login">
+        <overlayClock :show="loading" :msg="'Cargando...'"/>
         <div class="box-alerts">
             <div v-if="state == 305 || state == 304">
                 <alertClock class="lg warning" :msg="mensaje"/>
@@ -11,7 +12,7 @@
         <div class="box-complete">
             <div class="box-login">
                 <div class="box-head">
-                    <img class="new_user" src="../assets/login.jpg" alt="Imagen de registro">
+                    <img class="new_user" src="../assets/login.jpg">
                     <titleClock id="title" v-bind:title="'Registrese'"/>
                 </div>
                 <div class="box-inputs">
@@ -50,29 +51,20 @@
                         <btnClock class="md" v-bind:name="'Registrarme'" v-bind:state="comprobarBtnEnviar" v-on:on-click="enviar"/>
                     </div>
                     <div class="box-link">
-                        <b-link :disabled="loading" href="#/Auth">Ya tengo una cuenta</b-link>
+                        <textBtnClock :disabled="loading" v-bind:href="'#/Auth'" v-bind:name="'Ya tengo una cuenta'"/>
                     </div>
                 </div>
             </div>
         </div>
-    </b-overlay>
+    </div>
 </template>
 
 <script>
 
-import alertClock from '@/components/atoms/alert-clock.vue';
-import titleClock from '@/components/atoms/title-clock.vue';
-import btnClock from '@/components/atoms/btn-clock.vue';
-import inputClock from '@/components/atoms/input-clock.vue';
+import router from 'vue-router'
 
 export default{
     name: 'Login',
-    components: {
-        titleClock, 
-        btnClock,
-        inputClock,
-        alertClock
-    },
     metaInfo() {
         return {
             meta: [{
@@ -98,46 +90,25 @@ export default{
     },
     computed:{
         comprobarName1(){
-            if(this.userName1.length == 0){
-                return 'null'
-            }
-            return this.userName1.length >= 1 ? 'true' : 'false'
+            return this.userName1.length == 0 ? 'null' : this.userName1.length >= 1 ? 'true' : 'false'
         },
         comprobarName2(){
-            if(this.userName2.length == 0){
-                return 'null'
-            }
-            return this.userName2.length >= 1 ? 'true' : 'null'
+            return this.userName2.length == 0 ? 'null' : this.userName2.length >= 1 ? 'true' : 'null'
         },
         comprobarLastName1(){
-            if(this.userLastName1.length == 0){
-                return 'null'
-            }
-            return this.userLastName1.length >= 1 ? 'true' : 'false'
+            return this.userLastName1.length == 0 ? 'null' : this.userLastName1.length >= 1 ? 'true' : 'false'
         },
         comprobarLastName2(){
-            if(this.userLastName2.length == 0){
-                return 'null'
-            }
-            return this.userLastName2.length >= 1 ? 'true' : 'null'
+            return this.userLastName2.length == 0 ? 'null' : this.userLastName2.length >= 1 ? 'true' : 'null'
         },
         comprobarEmail(){
-            if(this.userEmail.length == 0){
-                return 'null'
-            }
-            return this.userEmail.length >= 6 ? 'true' : 'false'
+            return this.userEmail.length == 0 ? 'null' : this.userEmail.length >= 6 ? 'true' : 'false'
         },
         comprobarPassword(){
-            if(this.userPassword.length == 0){
-                return 'null'
-            }
-            return this.userPassword.length >= 8 ? 'true' : 'false'
+            return this.userPassword.length == 0 ? 'null' : this.userPassword.length >= 8 ? 'true' : 'false'
         },
         comprobarCity(){
-            if(this.userCity.length == 0){
-                return 'null'
-            }
-            return this.userCity.length >= 1 ? 'true' : 'false'
+            return this.userCity.length == 0 ? 'null' : this.userCity.length >= 1 ? 'true' : 'false'
         },
         comprobarBtnEnviar(){
             return this.comprobarName1 == 'true' && this.comprobarLastName1  == 'true' && this.comprobarEmail == 'true'  && this.comprobarPassword == 'true' && this.comprobarCity == 'true' ? false : true

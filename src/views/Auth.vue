@@ -1,5 +1,6 @@
 <template>
-    <b-overlay :show="loading" rounded="sm">
+    <div id="auth">
+        <overlayClock :show="loading" :msg="'Cargando...'"/>
         <div class="box-alerts">
             <div v-if="state == 305 || state == 306 || state == 307">
                 <alertClock class="lg warning" :msg="mensaje"/>
@@ -11,7 +12,7 @@
         <div class="box-complete">
             <div class="box-auth">
                 <div class="box-head">
-                    <img class="auth_user" src="../assets/auth.jpg" alt="Imagen de autenticacion">
+                    <img class="auth_user" src="../assets/auth.jpg">
                     <titleClock id="title" v-bind:title="'Ingrese'"/>
                 </div>
                 <div class="box-inputs">
@@ -27,40 +28,28 @@
                         <btnClock class="md" v-bind:name="'Ingresar'" v-bind:state="comprobarBtnEnviar" v-on:on-click="enviar"/>
                     </div>
                     <div class="box-link">
-                        <b-link :disabled="loading" href="#/ForgotPassword">Olvide mi contraseña</b-link>
-                        <b-link :disabled="loading" href="#/Login">No tengo una cuenta</b-link>
+                        <textBtnClock :disabled="loading" v-bind:href="'#/ForgotPassword'" v-bind:name="'Olvidé mi contraseña'"/>
+                        <textBtnClock :disabled="loading" v-bind:href="'#/Login'" v-bind:name="'No tengo una cuenta'"/>
                     </div>
                     <div class="box-accounts">
                         <p class="text-account">O ingrese con:</p>
                         <div class="box-logos">
-                            <b-link :disabled="loading" @click="google">
-                                <img class="google_logo" src="../assets/logo_google_2.png" alt="Logo de Google">
-                            </b-link>
-                            <b-link :disabled="loading" @click="google">
-                                <img class="facebook_logo" src="../assets/logo_facebook_2.png" alt="Logo de Facebook">
-                            </b-link>
-                        </div>  
+                            <logoGoogle class="google_logo" v-on:on-click="google"/>
+                            <logoFacebook class="facebook_logo" v-on:on-click="google"/>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </b-overlay>
+    </div>
 </template>
 
 <script>
-import alertClock from '@/components/atoms/alert-clock.vue';
-import titleClock from '@/components/atoms/title-clock.vue';
-import btnClock from '@/components/atoms/btn-clock.vue';
-import inputClock from '@/components/atoms/input-clock.vue';
+import io from "socket.io-client"
+import { defineComponent } from 'vue';
 
-export default{
+export default defineComponent({
     name: 'auth',
-    components: {
-        titleClock, 
-        btnClock,
-        inputClock,
-        alertClock
-    },
     data(){
         return{
             state: "",
@@ -68,21 +57,16 @@ export default{
             userPassword: "",
             loading: false,
             mensaje: "",
-            socket: {}
+            socket: {},
+            href: ""
         }
     },
     computed:{
         comprobarEmail(){
-            if(this.userEmail.length == 0){
-                return 'null'
-            }
-            return this.userEmail.length >= 6 ? 'true' : 'false'
+            return this.userEmail.length == 0 ? 'null' : this.userEmail.length >= 6 ? 'true' : 'false'
         },
         comprobarPassword(){
-            if(this.userPassword.length == 0){
-                return 'null'
-            }
-            return this.userPassword.length >= 8 ? 'true' : 'false'
+            return this.userPassword.length == 0 ? 'null' : this.userPassword.length >= 8 ? 'true' : 'false'
         },
         comprobarBtnEnviar(){
             return this.comprobarPassword == 'true' && this.comprobarEmail == 'true' ? false : true
@@ -97,26 +81,26 @@ export default{
             vue.axios.post('/user/auth',{
                 mail: this.userEmail,
                 pass: this.userPassword
-            }).then(function (responseAuth) {
-                vue.state = responseAuth.data.code
-                vue.mensaje = responseAuth.data.msg
-                if(responseAuth.data.code == 300 ){
+            }).then(function (response) {
+                vue.state = response.data.code
+                vue.mensaje = response.data.msg
+                if(response.data.code == 300 ){
                     console.log("usuario autenticado")
-                    localStorage.setItem("nombre", responseAuth.data.infoClient.nombre)
-                    localStorage.setItem("correo", responseAuth.data.infoClient.correo)
-                    localStorage.setItem("id", responseAuth.data.infoClient.id)
+                    localStorage.setItem("nombre", response.data.infoClient.nombre)
+                    localStorage.setItem("correo", response.data.infoClient.correo)
+                    localStorage.setItem("id", response.data.infoClient.id)
                     vue.axios.post('/token/createtoken',{
                         tokenData: {
                             nombre: localStorage.getItem("nombre"),
                             correo: localStorage.getItem("correo"),
                             id: localStorage.getItem("id")
                         }
-                    }).then(function(responseToken){
-                        vue.state = responseToken.data.code
-                        vue.mensaje = responseToken.data.msg
-                        if(responseToken.data.code == 300){
+                    }).then(function(response){
+                        vue.state = response.data.code
+                        vue.mensaje = response.data.msg
+                        if(response.data.code == 300){
                             console.log("token recibido")
-                            localStorage.setItem("token", responseToken.data.token)
+                            localStorage.setItem("token", response.data.token)
                             vue.$router.push('/inicio')
                         }else{
                             vue.loading = false
@@ -148,7 +132,7 @@ export default{
             });
         }
     }
-}
+});
 </script>
 
 <style scoped>
@@ -211,6 +195,10 @@ export default{
         flex-direction: column;
         align-items: center;
     }
+    .box-logos{
+        display: flex;
+        flex-direction: row;
+    }
     p{
         color: black;
         width: 275px;
@@ -272,6 +260,10 @@ export default{
         flex-direction: row;
         justify-content: space-between;
     }
+    .box-logos{
+        display: flex;
+        flex-direction: row;
+    }
     p{
         color: black;
         width: 275px;
@@ -285,10 +277,10 @@ export default{
         width: 200px; height: 200px;
     }
     .facebook_logo{
-        width: 45px; height: 50px; margin-left: 15px; box-shadow: 0px 0px 3px white;
+        width: 40px; height: 50px; margin-left: 15px; box-shadow: 0px 0px 3px white;
     } 
     .google_logo{
-        width: 45px; height: 50px; box-shadow: 0px 0px 3px white;
+        width: 40px; height: 50px; box-shadow: 0px 0px 3px white;
     }
     .box-auth {
         display: flex;
@@ -332,6 +324,10 @@ export default{
         display: flex;
         flex-direction: row;
         justify-content: space-between;
+    }
+    .box-logos{
+        display: flex;
+        flex-direction: row;
     }
     p{
         color: white;

@@ -1,54 +1,17 @@
 <template>
     <div>
-        <b-navbar toggleable="md" style="background-color:#C0C0C0">
-            <b-container>
-                <b-navbar-toggle target="nav-collapse">
-                </b-navbar-toggle>
-                <b-navbar-brand href="#/inicio">
-                    <img id=logo alt="Vue logo" src="@/assets/logo_clock.png" width="55px">
-                    Your Clock
-                </b-navbar-brand>
-                <b-collapse id="nav-collapse" is-nav>
-                    <b-navbar-nav class="ml-auto">
-                        <b-nav-item :to="{name: 'inicio'}">Inicio</b-nav-item>
-                <b-nav-item-dropdown right>
-                <template v-slot:button-content>
-                    <em>Cuenta</em>
-                </template>
-                <b-dropdown-item id=btn-settings href="#/Settings">Configuracion</b-dropdown-item>
-                <b-dropdown-item-button id=btn-logout @click="salir">Salir</b-dropdown-item-button>
-                </b-nav-item-dropdown>
-                    </b-navbar-nav>
-                </b-collapse>
-            </b-container>
-        </b-navbar>
         <div class="mt-5 text-center">
-            <b-container fluid>
-                <h1>Bienvenid@ {{userInfo.nombre}}</h1>
-            </b-container>
-            <br><br>
-            <b-col>
-                <br>
-                temperatura ambiente: {{datos.temperatura_amb}}
-                <br>
-                temperatura local: {{datos.temperatura_local}}
-                <br>
-            </b-col>
-            <b-col>
-                <div>
-                    <br>
-                    Select a time: <input type="time" v-model="alarm" class="form-control">
-                    <br>
-                    <br>
-                    <b-button @click="alarma" variant="outline-success">Enviar alarma</b-button>
-                </div>
-            </b-col>
+            <br>
+            temperatura ambiente: {{datos.temp_amb}}
+            <br>
+            temperatura local: {{datos.temp_local}}
+            <br>
         </div>
     </div>
 </template>
 
 <script>
-import io from "socket.io-client"
+import { io } from "socket.io-client";
 
 export default {
     name: 'Inicio',
@@ -59,8 +22,8 @@ export default {
             URL: "",
             token: localStorage.token,
             datos: {
-                temperatura_amb: 0,
-                temperatura_local: 0
+                temp_amb: 0,
+                temp_local: 0
             },
             userInfo:{
                 nombre: Buffer.from(localStorage.nombre, 'base64').toString('ascii'),
@@ -96,12 +59,20 @@ export default {
         }else if(process.env.NODE_ENV === "development"){
             vue.URL = process.env.VUE_APP_HOST_DEV;
         }
-        this.socket = io(vue.URL);
-        console.log("Connected socket to: "+vue.URL);
+        vue.socket = io(vue.URL, {
+            transports: ["polling", "websocket"]
+        });
+        console.log("Connected to socket: "+vue.URL);
+        vue.socket.emit("setDevice", 114);
+        console.log("Connected to device: "+114);
     },
     async mounted(){
+        console.log("ok");
         let vue = this
-        await vue.socket.on('datos', data => {
+        vue.socket.on("connect", (data) => {
+            console.log("socket connected");
+        });
+        vue.socket.on('datos', (data) => {
             vue.datos = data;
             console.log(data)
         })
@@ -111,7 +82,7 @@ export default {
 
 <style scoped>
 	h1 {
-		font-family: courier, courier new, serif;
+		font-family: Courier;
 		text-align: center;
 		font-weight: 450;
 		font-size: 40px;
