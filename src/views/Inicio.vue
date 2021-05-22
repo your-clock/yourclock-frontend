@@ -11,7 +11,7 @@
 </template>
 
 <script>
-import io from "socket.io-client"
+import { io } from "socket.io-client";
 
 export default {
     name: 'Inicio',
@@ -59,12 +59,20 @@ export default {
         }else if(process.env.NODE_ENV === "development"){
             vue.URL = process.env.VUE_APP_HOST_DEV;
         }
-        this.socket = io(vue.URL);
-        console.log("Connected socket to: "+vue.URL);
+        vue.socket = io(vue.URL, {
+            transports: ["polling", "websocket"]
+        });
+        console.log("Connected to socket: "+vue.URL);
+        vue.socket.emit("setDevice", 114);
+        console.log("Connected to device: "+114);
     },
     async mounted(){
+        console.log("ok");
         let vue = this
-        await vue.socket.on('datos', data => {
+        vue.socket.on("connect", (data) => {
+            console.log("socket connected");
+        });
+        vue.socket.on('datos', (data) => {
             vue.datos = data;
             console.log(data)
         })

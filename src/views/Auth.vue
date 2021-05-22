@@ -100,7 +100,7 @@ export default defineComponent({
                         vue.mensaje = response.data.msg
                         if(response.data.code == 300){
                             console.log("token recibido")
-                            localStorage.setItem("uuid", response.data.uuid)
+                            localStorage.setItem("token", response.data.token)
                             vue.$router.push('/inicio')
                         }else{
                             vue.loading = false
