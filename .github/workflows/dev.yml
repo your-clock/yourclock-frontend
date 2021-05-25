@@ -25,3 +25,50 @@ jobs:
           args: >
             -Dsonar.branch.target=dev
             -Dsonar.branch.name=dev
+
+  build:
+    runs-on: ubuntu-latest
+    env:
+      PACKAGE_TOKEN: ${{ secrets.PACKAGE_TOKEN }}
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - name: install dependencies
+        shell: bash
+        run: |
+          npm install @your-clock/yourclock-webcomponents-lib@0.1.2
+          npm ci
+      - name: Build project
+        shell: bash
+        run: npm run build:dev
+      - name: Upload build project
+        uses: actions/upload-artifact@v2
+        with:
+          name: dist
+          retention-days: 1
+          path: dist
+
+  deploy-netlify:
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/dev'
+    needs: [build, sonar]
+    environment: dev
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - name: Download build of project
+        uses: actions/download-artifact@v2
+        with:
+          name: dist
+          path: dist
+      - name: Deploy to Netlify
+        uses: nwtgck/actions-netlify@v1.2
+        with:
+          publish-dir: "./dist"
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          deploy-message: "Deploy from GitHub Actions"
+        env:
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_API_KEY }}
+          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_APP_ID }}

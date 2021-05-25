@@ -9,11 +9,7 @@ import webcomponents from '@your-clock/yourclock-webcomponents-lib'
 require('dotenv').config();
 
 // Agregamos la URL base de nuestra API
-if(process.env.NODE_ENV === "production"){
-  axios.defaults.baseURL = process.env.VUE_APP_HOST_PROD+'/api';
-}else if(process.env.NODE_ENV === "development"){
-  axios.defaults.baseURL = process.env.VUE_APP_HOST_DEV+'/api';
-}
+axios.defaults.baseURL = process.env.VUE_APP_HOST+'/api';
 
 console.log(axios.defaults.baseURL)
 console.log(process.env.NODE_ENV)
