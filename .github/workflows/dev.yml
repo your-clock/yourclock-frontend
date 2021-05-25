@@ -8,6 +8,7 @@ on:
 env:
   project_name: "yourclock-frontend"
   language: "javascript" #javascript, java, python
+  branch_default: "dev"
 
 jobs:
   sonar:
@@ -23,8 +24,8 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         with:
           args: >
-            -Dsonar.branch.target=dev
-            -Dsonar.branch.name=dev
+            -Dsonar.branch.target=${{ env.branch_default }}
+            -Dsonar.branch.name=${{ env.branch_default }}
 
   build:
     runs-on: ubuntu-latest
@@ -36,9 +37,7 @@ jobs:
           fetch-depth: 0
       - name: install dependencies
         shell: bash
-        run: |
-          npm install @your-clock/yourclock-webcomponents-lib@0.1.2
-          npm ci
+        run: npm ci
       - name: Build project
         shell: bash
         run: npm run build:dev
@@ -69,6 +68,7 @@ jobs:
           publish-dir: "./dist"
           github-token: ${{ secrets.GITHUB_TOKEN }}
           deploy-message: "Deploy from GitHub Actions"
+          production-deploy: true
         env:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_API_KEY }}
           NETLIFY_SITE_ID: ${{ secrets.NETLIFY_APP_ID }}
