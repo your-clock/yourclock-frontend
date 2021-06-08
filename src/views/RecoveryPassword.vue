@@ -5,14 +5,10 @@
         </h1>
         <br>
         <div v-if="state == 305">
-            <!-- <b-alert show dismissible variant="warning">
-                Llene todos los campos para completar el registro
-            </b-alert> -->
+            <alertClock class="lg warning" :msg="'Llene todos los campos para completar el registro'"/>
         </div>
         <div v-else-if="state == 400">
-            <!-- <b-alert show dismissible variant="warning">
-                Error, compruebe su conexion e intentelo de nuevo
-            </b-alert> -->
+            <alertClock class="lg warning" :msg="'Error, compruebe su conexion e intentelo de nuevo'"/>
         </div>
         <br>
         Nueva contraseña:

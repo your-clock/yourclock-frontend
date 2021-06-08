@@ -19,7 +19,6 @@ export default {
         return{
             alarm: "",
             socket: {},
-            URL: "",
             token: localStorage.token,
             datos: {
                 temp_amb: 0,
@@ -53,28 +52,19 @@ export default {
 		}
     },
     created() {
-        let vue = this;
-        if(process.env.VUE_APP_NODE_ENV === "production"){
-            vue.URL = process.env.VUE_APP_HOST_PROD;
-        }else if(process.env.NODE_ENV === "development"){
-            vue.URL = process.env.VUE_APP_HOST_DEV;
-        }
-        vue.socket = io(vue.URL, {
+        this.socket = io(process.env.VUE_APP_HOST, {
             transports: ["polling", "websocket"]
         });
-        console.log("Connected to socket: "+vue.URL);
-        vue.socket.emit("setDevice", 114);
-        console.log("Connected to device: "+114);
+        this.socket.emit("setDevice", "114");
     },
     async mounted(){
-        console.log("ok");
         let vue = this
-        vue.socket.on("connect", (data) => {
+        this.socket.on("connect", () => {
             console.log("socket connected");
         });
-        vue.socket.on('datos', (data) => {
+        this.socket.on("datos", (data) => {
             vue.datos = data;
-            console.log(data)
+            console.log(`Datos obtenidos por socket: ${data}`)
         })
     }
 }

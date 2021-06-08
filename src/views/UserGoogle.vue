@@ -1,7 +1,6 @@
 <template>
     <div class="mt-5 text-center">
-        <!-- <b-overlay :show="true" rounded="sm">
-        </b-overlay> -->
+        <overlayClock :show="true" :msg="'Cargando...'"/>
     </div>
 </template>
 
@@ -24,7 +23,7 @@ export default {
             }).then(function(response){
                 if(response.data.code == 300){
                     console.log("token recibido")
-                    localStorage.setItem("uuid", response.data.uuid)
+                    localStorage.setItem("token", response.data.token)
                     vue.$router.push('/inicio')
                 }else{
                     vue.$router.push('/error')
