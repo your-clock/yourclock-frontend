@@ -36,8 +36,6 @@
 
 <script>
 
-import router from 'vue-router'
-
 export default {
     name: 'forgotpassword',
     data(){
@@ -48,7 +46,7 @@ export default {
     },
     computed:{
         comprobarEmail(){
-            return this.userEmail.length > 0 ? true : false
+            return this.userEmail.length > 0
         }
     },
     methods:{
@@ -61,7 +59,7 @@ export default {
             .then(function(response){
                 console.log(response.data)
                 vue.state = response.data
-                if(response.data == 300){
+                if(response.data === 300){
                     alert("Mensaje enviado exitosamente, verifique su correo para cambiar su contraseña")
                     vue.$router.push('/')
                 }

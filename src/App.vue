@@ -1,14 +1,24 @@
 <template>
   <div id="app">
+    <metainfo>
+      <template v-slot:title="{ content }">{{ content }}</template>
+    </metainfo>
     <router-view/>
   </div>
 </template>
 
 <script>
+
+import { useMeta } from 'vue-meta'
+
 export default {
   name: 'app',
-  metaInfo: {
-    title: 'Your clock ⏲'
+  setup () {
+    useMeta({
+      title: 'Your clock ⏲',
+      description: 'The Description',
+      htmlAttrs: { lang: 'es', amp: true }
+    })
   },
   data(){
     return{
