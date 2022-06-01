@@ -1,11 +1,12 @@
 {
   "name": "your-clock",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "private": true,
   "description": "Frontend de la pagina de Your-clock hecho en vueJS",
   "scripts": {
     "build:dev": "vue-cli-service build --mode development",
     "build:prod": "vue-cli-service build --mode production",
+    "serve:local": "vue-cli-service serve --mode local",
     "serve:dev": "vue-cli-service serve --mode development",
     "serve:prod": "vue-cli-service serve --mode production",
     "start": "npm run build:prod && node app.js",
@@ -15,7 +16,7 @@
     "@vue/cli-plugin-babel": "^4.1.0",
     "@vue/cli-service": "^4.5.6",
     "@vue/compiler-sfc": "^3.0.9",
-    "@your-clock/yourclock-webcomponents-lib": "^0.1.2",
+    "@your-clock/yourclock-webcomponents-lib": "^1.0.9",
     "axios": "^0.20.0",
     "chart.js": "^2.9.3",
     "core-js": "^3.4.3",
@@ -27,10 +28,10 @@
     "vue": "^3.0.5",
     "vue-axios": "^3.2.4",
     "vue-chartjs": "^3.5.0",
-    "vue-meta": "^2.4.0",
+    "vue-meta": "^3.0.0-alpha.9",
     "vue-router": "^4.0.0-0",
     "vue-template-compiler": "^2.6.10",
-    "vuex": "^4.0.0-alpha.1"
+    "vuex": "^4.0.2"
   },
   "devDependencies": {
     "@babel/polyfill": "^7.11.5",

@@ -106,18 +106,18 @@ const router = createRouter({
 router.beforeEach((to, from, next)=> {
 
   console.log(to)
-  if(localStorage.getItem('token') == undefined){
+  if(localStorage.getItem('token') === undefined){
     localStorage.setItem('token', null)
   }
 
-  var autorizacion = to.matched.some(record => record.meta.autentificado)
+  const autorizacion = to.matched.some(record => record.meta.autentificado);
 
   if(autorizacion){
     axios.post('/token/verifytoken',{
       token: localStorage.token
     })
     .then(function(response){
-      var verificacion = response.data
+      const verificacion = response.data;
       if(verificacion){
         next()
       }else{

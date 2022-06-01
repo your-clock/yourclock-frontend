@@ -21,7 +21,7 @@ export default {
                     id: localStorage.getItem("id")
                 }
             }).then(function(response){
-                if(response.data.code == 300){
+                if(response.data.code === 300){
                     console.log("token recibido")
                     localStorage.setItem("token", response.data.token)
                     vue.$router.push('/inicio')
