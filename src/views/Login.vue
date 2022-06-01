@@ -2,11 +2,8 @@
     <div id="login">
       <overlayClock :show="loading" :msg="'Cargando...'"/>
       <div class="box-alerts">
-        <div v-if="state === 302 || state === 303 || state === 304 || state === 301">
-          <alertClock class="lg warning" :msg="mensaje" title="Alerta"/>
-        </div>
-        <div v-else-if="state === 308 || state === 400 || state === 401">
-          <alertClock class="lg danger" :msg="mensaje" title="Error"/>
+        <div v-if="state === 301 || state === 305">
+          <alertClock class="lg warning" :msg="message" title="Alerta"/>
         </div>
       </div>
       <div class="box-container-login">
@@ -31,7 +28,7 @@
                 :minPwd="2"
                 :maxPwd="6"
                 :minUserName="1"
-                :maxUserName="3"
+                :maxUserName="4"
                 v-on:click-btn="enviar"
                 v-model:userPassword="userPassword"
                 v-model:userEmail="userEmail"
@@ -56,8 +53,7 @@ export default{
             userCity: "",
             state: "",
             loading: false,
-            mensaje: "",
-            seenWarning: false
+            message: ""
         }
     },
     methods:{
@@ -65,34 +61,28 @@ export default{
             let vue = this;
             vue.loading = true;
             vue.state = 0;
-            vue.seenWarning = false;
-            console.log("enviado")
             this.axios.post('/user/login', {
                 mail: this.userEmail,
                 pass: this.userPassword,
                 name: this.userName,
                 city: this.userCity
             }).then(function (response) {
-                console.log(response.data)
                 vue.state = response.data.code
-                vue.mensaje = response.data.msg
-                if(response.data.code === 300){
-                    alert(vue.mensaje)
+                vue.message = response.data.msg
+                if(response.data.code === 308){
+                    alert(vue.message)
                     vue.$router.push('/')
                 }else{
                     vue.loading = false;
                 }
             }).catch(function (error) {
-                if(error.response.status >= 400 && error.response.status < 500){
-                    if(error.response.data.code === 305){
-                        console.log(error.response.data.code)
-                        vue.seenWarning = true
-                        vue.comprobarEmail = false
-                    }
-                    vue.loading = false;
-                    console.log(error.response.data);
+                if(error.response.status >= 500){
+                  console.log("ERROR in login: "+error);
+                  vue.$router.push('/error')
                 }else{
-                    vue.$router.push('/error');
+                  vue.loading = false
+                  vue.state = error.response.data.code
+                  vue.message = error.response.data.msg
                 }
             });
         }

@@ -2,11 +2,11 @@
     <div id="auth">
         <overlayClock :show="loading" :msg="'Cargando...'"/>
         <div class="box-alerts">
-            <div v-if="state === 302 || state === 303 || state === 304 || state === 301">
-                <alertClock class="lg warning" :msg="mensaje" title="Alerta"/>
+            <div v-if="state === 301 || state === 303">
+                <alertClock class="lg warning" :msg="message" title="Alerta"/>
             </div>
-            <div v-else-if="state === 308 || state === 400 || state === 401">
-                <alertClock class="lg danger" :msg="mensaje" title="Error"/>
+            <div v-else-if="state === 302 || state === 304">
+                <alertClock class="lg danger" :msg="message" title="Error"/>
             </div>
         </div>
         <div class="box-container">
@@ -55,7 +55,7 @@ export default {
             userEmail: "",
             userPassword: "",
             loading: false,
-            mensaje: "",
+            message: "",
             socket: {},
             hour: "00",
             minute: "00"
@@ -83,9 +83,8 @@ export default {
                 pass: this.userPassword
             }).then(function (response) {
                 vue.state = response.data.code
-                vue.mensaje = response.data.msg
+                vue.message = response.data.msg
                 if(response.data.code === 300 ){
-                    console.log("usuario autenticado")
                     localStorage.setItem("nombre", response.data.infoClient.nombre)
                     localStorage.setItem("correo", response.data.infoClient.correo)
                     localStorage.setItem("id", response.data.infoClient.id)
@@ -97,7 +96,7 @@ export default {
                         }
                     }).then(function(response){
                         vue.state = response.data.code
-                        vue.mensaje = response.data.msg
+                        vue.message = response.data.msg
                         if(response.data.code === 300){
                             console.log("token recibido")
                             localStorage.setItem("token", response.data.token)
@@ -119,7 +118,7 @@ export default {
                 }else{
                   vue.loading = false
                   vue.state = error.response.data.code
-                  vue.mensaje = error.response.data.msg
+                  vue.message = error.response.data.msg
                 }
             });
         },
