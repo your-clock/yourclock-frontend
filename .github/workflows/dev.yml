@@ -51,7 +51,7 @@ jobs:
   deploy-netlify:
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/dev'
-    needs: [build, sonar]
+    needs: [build]
     environment: dev
     steps:
       - uses: actions/checkout@v4
