@@ -1,14 +1,14 @@
-name: Deploy Dev
+name: Deploy Prod
 
 on:
   push:
-    branches: [dev, feature/*, update/*, fix/*]
+    branches: [master]
   workflow_dispatch:
 
 env:
   project_name: "yourclock-frontend"
   language: "javascript" #javascript, java, python
-  branch_default: "dev"
+  branch_default: "master"
 
 jobs:
   sonar:
@@ -40,7 +40,7 @@ jobs:
         run: npm ci
       - name: Build project
         shell: bash
-        run: npm run build:dev
+        run: npm run build:prod
       - name: Upload build project
         uses: actions/upload-artifact@v3
         with:
@@ -50,9 +50,9 @@ jobs:
 
   deploy-netlify:
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/dev'
+    if: github.ref == 'refs/heads/master'
     needs: [build, sonar]
-    environment: dev
+    environment: prod
     steps:
       - uses: actions/checkout@v4
         with:

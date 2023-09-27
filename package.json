@@ -4,11 +4,11 @@
   "private": true,
   "description": "Frontend de la pagina de Your-clock hecho en vueJS",
   "scripts": {
-    "build:dev": "vue-cli-service build --mode development",
-    "build:prod": "vue-cli-service build --mode production",
-    "serve:local": "vue-cli-service serve --mode local",
-    "serve:dev": "vue-cli-service serve --mode development",
-    "serve:prod": "vue-cli-service serve --mode production",
+    "build:dev": "export NODE_OPTIONS=--openssl-legacy-provider && vue-cli-service build --mode development",
+    "build:prod": "export NODE_OPTIONS=--openssl-legacy-provider && vue-cli-service build --mode production",
+    "serve:local": "export NODE_OPTIONS=--openssl-legacy-provider && vue-cli-service serve --mode local",
+    "serve:dev": "export NODE_OPTIONS=--openssl-legacy-provider && vue-cli-service serve --mode development",
+    "serve:prod": "export NODE_OPTIONS=--openssl-legacy-provider && vue-cli-service serve --mode production",
     "start": "npm run build:prod && node app.js",
     "start:dev": "npm run build:dev && node app.js"
   },
