@@ -5,22 +5,20 @@
         </h1>
         <br>
         <div v-if="state == 305">
-            <b-alert show dismissible variant="warning">
-                Llene todos los campos para completar el registro
-            </b-alert>
+            <alertClock class="lg warning" :msg="'Llene todos los campos para completar el registro'"/>
         </div>
         <div v-else-if="state == 400">
-            <b-alert show dismissible variant="warning">
-                Error, compruebe su conexion e intentelo de nuevo
-            </b-alert>
+            <alertClock class="lg warning" :msg="'Error, compruebe su conexion e intentelo de nuevo'"/>
         </div>
         <br>
-        Nueva contraseña: <b-form-input type="password" v-model="userPassword" :state="comprobarPassword" size="sm" placeholder="Escriba su contraseña"></b-form-input>
+        Nueva contraseña:
+        <inputClock class="md" type="password" placeholder="Escriba su contraseña" v-bind:success="comprobarPassword" v-model="userPassword" />
         <br>
-        Repita la contraseña: <b-form-input type="password" v-model="userPasswordVerification" :state="comprobarPasswordVerification" size="sm" placeholder="Escriba de nuevo su contraseña"></b-form-input>
+        Repita la contraseña: 
+        <inputClock class="md" type="password" placeholder="Escriba de nuevo su contraseña" v-bind:success="comprobarPasswordVerification" v-model="userPasswordVerification" />
         <br>
         <div>
-            <b-button @click="enviar" variant="outline-success">Cambiar</b-button>
+            <btnClock class="md" v-bind:name="'Cambiar'" v-on:on-click="enviar"/>
         </div>
     </div>
 </template>
@@ -57,9 +55,8 @@ export default {
                     pass: this.userPassword
                 })
                 .then(function(response){
-                    console.log(response.data)
-                    vue.state = response.data
-                    if(response.data == 310){
+                    vue.state = response.data.code
+                    if(response.data.code == 310){
                         alert("Contraseña reestablecida exitosamente, ingrese de nuevo")
                         localStorage.token = null
                         vue.$router.push('/auth')

@@ -1,86 +1,75 @@
 <template>
-    <b-overlay :show="loading" rounded="sm">
+    <div id="auth">
+        <overlayClock :show="loading" :msg="'Cargando...'"/>
         <div class="box-alerts">
-            <div v-if="state == 305 || state == 306 || state == 307">
-                <alertClock class="lg warning" :msg="mensaje"/>
+            <div v-if="state === 301 || state === 303">
+                <alertClock class="lg warning" :msg="message" title="Alerta"/>
             </div>
-            <div v-else-if="state == 308 || state == 400 || state == 401">
-                <alertClock class="lg danger" :msg="mensaje"/>
+            <div v-else-if="state === 302 || state === 304">
+                <alertClock class="lg danger" :msg="message" title="Error"/>
             </div>
         </div>
-        <div class="box-complete">
+        <div class="box-container">
+          <div class="box-left">
+            <div class="box-logo">
+              <img class="logo-yc" src="../assets/logo_yc.png">
+            </div>
             <div class="box-auth">
-                <div class="box-head">
-                    <img class="auth_user" src="../assets/auth.jpg">
-                    <titleClock id="title" v-bind:title="'Ingrese'"/>
-                </div>
-                <div class="box-inputs">
-                    <div class="box-input-email">
-                        <p>Correo:</p>
-                        <inputClock class="md input-email" :disabled="loading" type="email" placeholder="Escriba su correo electronico" v-bind:success="comprobarEmail" v-model="userEmail"/>
-                    </div>
-                    <div class="box-input-password">
-                        <p>Contraseña:</p>
-                        <inputClock class="md input-auth" :disabled="loading" type="password" placeholder="Escriba su contraseña" v-bind:success="comprobarPassword" v-model="userPassword"/>
-                    </div>
-                    <div class="box-button">
-                        <btnClock class="md" v-bind:name="'Ingresar'" v-bind:state="comprobarBtnEnviar" v-on:on-click="enviar"/>
-                    </div>
-                    <div class="box-link">
-                        <b-link :disabled="loading" href="#/ForgotPassword">Olvide mi contraseña</b-link>
-                        <b-link :disabled="loading" href="#/Login">No tengo una cuenta</b-link>
-                    </div>
-                    <div class="box-accounts">
-                        <p class="text-account">O ingrese con:</p>
-                        <div class="box-logos">
-                            <b-link :disabled="loading" @click="google">
-                                <img class="google_logo" src="../assets/logo_google_2.png">
-                            </b-link>
-                            <b-link :disabled="loading" @click="google">
-                                <img class="facebook_logo" src="../assets/logo_facebook_2.png">
-                            </b-link>
-                        </div>  
-                    </div>
-                </div>
+              <formAuthClock
+                  :hrefAccount="'#/login'"
+                  :hrefPwd="'#/forgotpassword'"
+                  :nameHrefPwd="'Olvide mi contraseña :c'"
+                  :nameHrefAccount="'No tengo una cuenta :/'"
+                  :titleForm="'Ingrese ahora'"
+                  :titleAccounts="'O ingrese con:'"
+                  :subtitle1="'Correo'"
+                  :subtitle2="'Contraseña'"
+                  :placeholderEmail="'Ingrese su correo electronico'"
+                  :placeholderPwd="'Ingrese su contraseña'"
+                  :minEmail="1"
+                  :maxEmail="4"
+                  :minPwd="2"
+                  :maxPwd="6"
+                  v-on:click-btn="enviar"
+                  v-on:click-google="google"
+                  v-on:click-facebook="google"
+                  v-model:userPassword="userPassword"
+                  v-model:userEmail="userEmail"
+              />
             </div>
+          </div>
+          <div class="box-right">
+            {{getHour}}
+          </div>
         </div>
-    </b-overlay>
+    </div>
 </template>
 
 <script>
-import io from "socket.io-client"
-import alertClock from '@/components/atoms/alert-clock.vue';
-import titleClock from '@/components/atoms/title-clock.vue';
-import btnClock from '@/components/atoms/btn-clock.vue';
-import inputClock from '@/components/atoms/input-clock.vue';
 
-export default{
+export default {
     name: 'auth',
-    components: {
-        titleClock, 
-        btnClock,
-        inputClock,
-        alertClock
-    },
     data(){
         return{
             state: "",
             userEmail: "",
             userPassword: "",
             loading: false,
-            mensaje: "",
-            socket: {}
+            message: "",
+            socket: {},
+            hour: "00",
+            minute: "00"
         }
     },
+    created() {
+      const self = this;
+      setInterval(function (){
+        self.updateTime();
+      }, 1000)
+    },
     computed:{
-        comprobarEmail(){
-            return this.userEmail.length == 0 ? 'null' : this.userEmail.length >= 6 ? 'true' : 'false'
-        },
-        comprobarPassword(){
-            return this.userPassword.length == 0 ? 'null' : this.userPassword.length >= 8 ? 'true' : 'false'
-        },
-        comprobarBtnEnviar(){
-            return this.comprobarPassword == 'true' && this.comprobarEmail == 'true' ? false : true
+        getHour(){
+          return `${this.hour} : ${this.minute}`
         }
     },  
     methods:{
@@ -94,9 +83,8 @@ export default{
                 pass: this.userPassword
             }).then(function (response) {
                 vue.state = response.data.code
-                vue.mensaje = response.data.msg
-                if(response.data.code == 300 ){
-                    console.log("usuario autenticado")
+                vue.message = response.data.msg
+                if(response.data.code === 300 ){
                     localStorage.setItem("nombre", response.data.infoClient.nombre)
                     localStorage.setItem("correo", response.data.infoClient.correo)
                     localStorage.setItem("id", response.data.infoClient.id)
@@ -108,8 +96,8 @@ export default{
                         }
                     }).then(function(response){
                         vue.state = response.data.code
-                        vue.mensaje = response.data.msg
-                        if(response.data.code == 300){
+                        vue.message = response.data.msg
+                        if(response.data.code === 300){
                             console.log("token recibido")
                             localStorage.setItem("token", response.data.token)
                             vue.$router.push('/inicio')
@@ -117,15 +105,21 @@ export default{
                             vue.loading = false
                         }
                     }).catch(function(error){
-                        console.log("ERROR: "+error);
+                        console.log("ERROR in token: "+error);
                         vue.$router.push('/error')
                     })
                 }else{
                     vue.loading = false
                 }
             }).catch(function (error) {
-                console.log("ERROR: "+error);
-                vue.$router.push('/error')
+                if(error.response.status >= 500){
+                  console.log("ERROR in auth: "+error);
+                  vue.$router.push('/error')
+                }else{
+                  vue.loading = false
+                  vue.state = error.response.data.code
+                  vue.message = error.response.data.msg
+                }
             });
         },
         google(){
@@ -141,198 +135,132 @@ export default{
                 console.log("ERROR: "+error)
                 vue.$router.push('/error')
             });
+        },
+        updateTime(){
+          const date = new Date(Date.now());
+          this.hour = date.getHours();
+          this.minute = date.getMinutes();
+          if (this.hour < 10) this.hour = "0" + this.hour.toString();
+          if (this.minute < 10) this.minute = "0" + this.minute.toString();
         }
     }
-}
+};
+
 </script>
 
-<style scoped>
-#title{
-    color: black;
-}
-@media only screen and (max-width: 400px) {
-    /* For mobile phones: */
-    .auth_user{
-        width: 150px; height: 150px;
-    }
-    .text-account{
-        padding-bottom: 10px;
-    }
-    .facebook_logo{
-        width: 40px; height: 45px; margin-left: 13px; box-shadow: 0px 0px 5px black;
-    } 
-    .google_logo{
-        width: 40px; height: 45px; box-shadow: 0px 0px 5px black;
-    }
-    .box-login {
-        display: flex;
-        flex-direction: column;
-        background: transparent;
-    }
-    .box-head{
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-    }
-    .box-inputs{
-        display: flex;
-        flex-direction: column;
-        padding: 20px 0px;
-    }
-    [class|="box-input"]{
-        display: flex;
-        flex-direction: column;
-        padding: 10px 0px 5px 0px;
-        align-self: stretch;
-    }
-    .box-link{
-        padding: 15px 0px 15px 0px;
-        display: flex;
-        flex-direction: column;
-        align-self: flex-end;
-    }
-    .box-button{
-        padding-top: 25px;
-    }
-    .box-complete{
-        background-color: white;
-        display: flex;
-        align-items: center;
-        height: 100vh;
-        justify-content: center;
-    }
-    .box-accounts{
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-    }
-    p{
-        color: black;
-        width: 275px;
-        margin-bottom: 0rem;
-        padding-right: 11px;
-    }
+<style>
+
+@import "../../node_modules/@your-clock/yourclock-webcomponents-lib/src/lib-components/fonts.css";
+
+body, html {
+  margin: 0;
+  padding: 0;
 }
 
-@media only screen and (min-width: 400px) {
-    /* For tablets: */
-    .auth_user{
-        width: 200px; height: 200px;
-    }
-    .facebook_logo{
-        width: 45px; height: 50px; margin-left: 13px; box-shadow: 0px 0px 5px black;
-    } 
-    .google_logo{
-        width: 45px; height: 50px; box-shadow: 0px 0px 5px black;
-    }
-    .box-auth {
-        display: flex;
-        flex-direction: column;
-        background: transparent;
-    }
-    .box-head{
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-    }
-    .box-inputs{
-        display: flex;
-        flex-direction: column;
-        padding: 20px 0px;
-    }
-    [class|="box-input"]{
-        display: flex;
-        flex-direction: column;
-        padding: 10px 0px 5px 0px;
-        align-self: stretch;
-    }
-    .box-button{
-        padding-top: 25px;
-    }
-    .box-complete{
-        background-color: white;
-        display: flex;
-        align-items: center;
-        height: 100vh;
-        justify-content: center;
-    }
-    .box-link{
-        padding: 15px 0px 25px 0px;
-        display: flex;
-        flex-direction: column;
-        align-self: flex-end;
-    }
-    .box-accounts{
-        display: flex;
-        flex-direction: row;
-        justify-content: space-between;
-    }
-    p{
-        color: black;
-        width: 275px;
-        margin-bottom: 0rem;
-        padding-right: 11px;
-    }
+@media only screen and (min-width: 1025px) {
+  /* For desktop: */
+  .box-container{
+    display: flex;
+    flex-direction: row;
+    height: 100vh;
+  }
+
+  .box-left{
+    width: 50%;
+    flex: 1;
+  }
+
+  .box-right{
+    display: flex;
+    font-family: font-clock-normal, serif;
+    font-size: 150px;
+    color: white;
+    width: 50%;
+    flex: 1;
+    background-image: url("../assets/fondo.jpeg");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-color: black;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .logo-yc{
+    margin-left: auto;
+    margin-right: auto;
+    width: 170px;
+    padding-top: 8px;
+    padding-bottom: 24px;
+  }
 }
-@media only screen and (min-width: 810px) {
-    /* For desktop: */
-    .auth_user{
-        width: 200px; height: 200px;
-    }
-    .facebook_logo{
-        width: 45px; height: 50px; margin-left: 15px; box-shadow: 0px 0px 3px white;
-    } 
-    .google_logo{
-        width: 45px; height: 50px; box-shadow: 0px 0px 3px white;
-    }
-    .box-auth {
-        display: flex;
-        flex-direction: row;
-        background: transparent;
-    }
-    .box-head{
-        align-self: center;
-        padding-right: 30px;
-    }
-    .box-inputs{
-        background: black;
-        box-shadow: 0px 0px 17px black;
-        display: flex;
-        flex-direction: column;
-        padding: 20px 30px;
-    }
-    [class|="box-input"]{
-        display: flex;
-        flex-direction: row;
-        padding: 6px 0px 5px 0px;
-        align-self: stretch;
-    }
-    .box-button{
-        padding-top: 10px;
-    }
-    .box-complete{
-        background-color: white;
-        display: flex;
-        align-items: center;
-        height: 100vh;
-        justify-content: center;
-    }
-    .box-link{
-        padding: 15px 0px 25px 0px;
-        display: flex;
-        flex-direction: column;
-        align-self: flex-end;
-    }
-    .box-accounts{
-        display: flex;
-        flex-direction: row;
-        justify-content: space-between;
-    }
-    p{
-        color: white;
-        width: 150px;
-        margin-bottom: 0rem;
-        padding-right: 11px;
-    }
+
+@media only screen and (max-width: 700px) {
+  /* For mobile phones: */
+  .box-container{
+    display: flex;
+    flex-direction: column;
+  }
+
+  .box-left{
+  }
+
+  .box-right{
+    display: flex;
+    font-family: font-clock-normal, serif;
+    font-size: 70px;
+    color: white;
+    padding: 100px 0px;
+    margin-top: 25px;
+    background-image: url("../assets/fondo.jpeg");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-color: black;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .logo-yc{
+    margin-left: auto;
+    margin-right: auto;
+    width: 125px;
+    padding-bottom: 8px;
+    padding-top: 8px;
+  }
 }
+
+@media only screen and (max-width: 1025px) and (min-width: 700px) {
+  /* For tablets: */
+  .box-container{
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+  }
+
+  .box-left{
+  }
+
+  .box-right{
+    display: flex;
+    font-family: font-clock-normal, serif;
+    font-size: 100px;
+    color: white;
+    margin-top: 25px;
+    padding: 100px 0px;
+    background-image: url("../assets/fondo.jpeg");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-color: black;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .logo-yc{
+    margin-left: auto;
+    margin-right: auto;
+    width: 200px;
+    padding-bottom: 16px;
+    padding-top: 16px;
+  }
+}
+
 </style>
