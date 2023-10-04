@@ -10,11 +10,20 @@ import ForgotPassword from '../views/ForgotPassword.vue'
 import Errors from '../views/Error.vue'
 import RecoveryPassword from '../views/RecoveryPassword.vue'
 import UserGoogle from '../views/UserGoogle.vue'
+import PrivacyPolicy from '../views/PrivacyPolicy.vue'
 
 const routes = [
   {
     path: '/',
     redirect: '/auth'
+  },
+  {
+    path: '/privacy_policy',
+    name: 'Privacy_policy',
+    component: PrivacyPolicy,
+    meta: {
+      autentificado: false
+    }
   },
   {
     path: '/login',
