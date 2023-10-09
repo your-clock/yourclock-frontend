@@ -1,4 +1,4 @@
-import { createRouter, createWebHashHistory } from 'vue-router'
+import { createRouter, createWebHistory } from 'vue-router'
 import axios from 'axios'
 import Home from '../views/Home.vue'
 import Auth from '../views/Auth.vue'
@@ -11,11 +11,20 @@ import Errors from '../views/Error.vue'
 import RecoveryPassword from '../views/RecoveryPassword.vue'
 import UserGoogle from '../views/UserGoogle.vue'
 import PrivacyPolicy from '../views/PrivacyPolicy.vue'
+import NotFound from '../views/NotFound.vue'
 
 const routes = [
   {
     path: '/',
     redirect: '/auth'
+  },
+  {
+    path: '/:pathMatch(.*)',
+    name: 'Not_found',
+    component: NotFound,
+    meta: {
+      autentificado: false
+    }
   },
   {
     path: '/privacy_policy',
@@ -108,13 +117,12 @@ const routes = [
 ]
 
 const router = createRouter({
-  history: createWebHashHistory(),
+  history: createWebHistory(),
   routes
 })
 
 router.beforeEach((to, from, next)=> {
 
-  console.log(to)
   if(localStorage.getItem('token') === undefined){
     localStorage.setItem('token', null)
   }
@@ -135,7 +143,7 @@ router.beforeEach((to, from, next)=> {
       }
     })
     .catch(function(error){
-      console.log("ERROR: "+error);
+      console.error("ERROR: "+error);
       next('error')
     })
   }else{

@@ -8,9 +8,7 @@
     "build:prod": "export NODE_OPTIONS=--openssl-legacy-provider && vue-cli-service build --mode production",
     "serve:local": "export NODE_OPTIONS=--openssl-legacy-provider && vue-cli-service serve --mode local",
     "serve:dev": "export NODE_OPTIONS=--openssl-legacy-provider && vue-cli-service serve --mode development",
-    "serve:prod": "export NODE_OPTIONS=--openssl-legacy-provider && vue-cli-service serve --mode production",
-    "start": "npm run build:prod && node app.js",
-    "start:dev": "npm run build:dev && node app.js"
+    "serve:prod": "export NODE_OPTIONS=--openssl-legacy-provider && vue-cli-service serve --mode production"
   },
   "dependencies": {
     "@vue/cli-plugin-babel": "^4.1.0",
