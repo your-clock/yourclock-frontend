@@ -4,7 +4,7 @@
             <b-container>
                 <b-navbar-toggle target="nav-collapse">
                 </b-navbar-toggle>
-                <b-navbar-brand href="#/inicio">
+                <b-navbar-brand href="/inicio">
                     <img id=logo alt="Vue logo" src="@/assets/logo_clock.png" width="55px">
                     Your Clock
                 </b-navbar-brand>
@@ -15,7 +15,7 @@
                 <template v-slot:button-content>
                     <em>Cuenta</em>
                 </template>
-                <b-dropdown-item id=btn-settings href="#/Settings">Configuracion</b-dropdown-item>
+                <b-dropdown-item id=btn-settings href="/Settings">Configuracion</b-dropdown-item>
                 <b-dropdown-item-button id=btn-logout @click="salir">Salir</b-dropdown-item-button>
                 </b-nav-item-dropdown>
                     </b-navbar-nav>

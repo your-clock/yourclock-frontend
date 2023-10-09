@@ -16,8 +16,8 @@
             </div>
             <div class="box-auth">
               <formAuthClock
-                  :hrefAccount="'#/login'"
-                  :hrefPwd="'#/forgotpassword'"
+                  :hrefAccount="'/login'"
+                  :hrefPwd="'/forgotpassword'"
                   :nameHrefPwd="'Olvide mi contraseña :c'"
                   :nameHrefAccount="'No tengo una cuenta :/'"
                   :titleForm="'Ingrese ahora'"
