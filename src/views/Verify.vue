@@ -6,7 +6,7 @@
     </div>
     <div class="box-messages">
       <titleClock id="message" class="lg black" v-bind:title="message"/>
-      <textBtnClock id="btnToAuth" class="lg black" :disabled="false" v-bind:name="'Intenta ingresar a tu cuenta :)'" :target="'_self'" :href="'#/auth'"/>
+      <textBtnClock id="btnToAuth" class="lg black" :disabled="false" v-bind:name="'Intenta ingresar a tu cuenta :)'" :target="'_self'" :href="'/auth'"/>
     </div>
   </div>
 </template>

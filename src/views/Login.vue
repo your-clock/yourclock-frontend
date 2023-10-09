@@ -15,7 +15,7 @@
         <div class="box-right-login">
           <div class="box-login">
             <formLoginClock
-                :hrefAccount="'#/auth'"
+                :hrefAccount="'/auth'"
                 :targetAccount="'_self'"
                 :nameHrefAccount="'Ya tengo una cuenta :)'"
                 :titleForm="'Registrate'"
