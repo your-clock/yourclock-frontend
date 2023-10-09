@@ -500,8 +500,6 @@ export default {
     width: 90%;
     max-width: 1024px;
     margin: 0 auto;
-}
-#app{
     text-align: left;
     -webkit-font-smoothing: none;
 }
